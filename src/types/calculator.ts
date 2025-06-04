@@ -42,7 +42,7 @@ export interface CalculatorState<T> {
 
 // Future Types for other calculators
 
-// Inflation Calculator Types (placeholder)
+// Inflation Calculator Types
 export interface InflationInputs {
   amount: number;
   startDate: string;
@@ -55,6 +55,11 @@ export interface InflationResult {
   adjustedAmount: number;
   totalInflation: number;
   annualizedRate: number;
+  purchasingPowerLoss: number;
+  equivalentValue: number;
+  periodInYears: number;
+  startCPI: number;
+  endCPI: number;
 }
 
 // Tax Calculator Types (placeholder)
