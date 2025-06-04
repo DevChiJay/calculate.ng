@@ -8,6 +8,8 @@ import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { calculateBMIResult, validateBMIInputs, type BMIInputs, type BMIResult } from '@/lib/calculations/bmi';
 import { cn } from '@/lib/utils';
+import { HistoryDisplay } from './HistoryDisplay';
+import { useCalculatorHistory } from '@/hooks/useCalculatorHistory';
 
 interface BMIFormData {
   weight: string;
@@ -18,6 +20,8 @@ interface BMIFormData {
 }
 
 export default function BMICalculator() {
+  const { addRecord } = useCalculatorHistory();
+  
   const [formData, setFormData] = useState<BMIFormData>({
     weight: '',
     height: '',
@@ -46,13 +50,16 @@ export default function BMICalculator() {
     };
 
     const validationErrors = validateBMIInputs(inputs);
-    setErrors(validationErrors);
-
-    if (validationErrors.length === 0 && inputs.weight) {
+    setErrors(validationErrors);    if (validationErrors.length === 0 && inputs.weight) {
       try {
         setIsCalculating(true);
         const bmiResult = calculateBMIResult(inputs as BMIInputs);
         setResult(bmiResult);
+        
+        // Add to history when calculation is complete and all required inputs are present
+        if (bmiResult && inputs.weight && (inputs.height || (inputs.heightFeet && inputs.heightInches))) {
+          addRecord('bmi', inputs, bmiResult);
+        }
       } catch (error) {
         console.error('BMI calculation error:', error);
         setErrors([error instanceof Error ? error.message : 'Calculation error occurred']);
@@ -63,7 +70,7 @@ export default function BMICalculator() {
     } else {
       setResult(null);
     }
-  }, [formData]);
+  }, [formData, addRecord]);
 
   // Calculate BMI whenever form data changes
   useEffect(() => {
@@ -328,10 +335,12 @@ export default function BMICalculator() {
                 pregnant women, elderly, or those with high muscle mass. Always consult with healthcare 
                 professionals for personalized medical advice.
               </p>
-            </div>
-          </CardContent>
+            </div>          </CardContent>
         </Card>
       )}
+
+      {/* History Display */}
+      <HistoryDisplay calculatorType="bmi" />
     </div>
   );
 }

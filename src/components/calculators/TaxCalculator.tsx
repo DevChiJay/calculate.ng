@@ -16,8 +16,12 @@ import {
   getTaxOptimizationSuggestions
 } from '@/lib/calculations/tax';
 import type { TaxInputs, TaxResult } from '@/types/calculator';
+import { HistoryDisplay } from './HistoryDisplay';
+import { useCalculatorHistory } from '@/hooks/useCalculatorHistory';
 
 export default function TaxCalculator() {
+  const { addRecord } = useCalculatorHistory();
+  
   const [formData, setFormData] = useState<{
     grossIncome: string;
     basicSalary: string;
@@ -73,6 +77,11 @@ export default function TaxCalculator() {
       try {
         const taxResult = calculateTaxResult(inputs as TaxInputs);
         setResult(taxResult);
+        
+        // Add to history when calculation is complete
+        if (taxResult && inputs.grossIncome) {
+          addRecord('tax', inputs, taxResult);
+        }
       } catch (error) {
         setErrors([error instanceof Error ? error.message : 'Calculation error occurred']);
         setResult(null);
@@ -80,7 +89,7 @@ export default function TaxCalculator() {
     } else {
       setResult(null);
     }
-  }, [formData]);
+  }, [formData, addRecord]);
 
   // Calculate on form data change
   useEffect(() => {
@@ -520,9 +529,11 @@ export default function TaxCalculator() {
                 <p>• This is for educational purposes and should not replace professional tax advice</p>
               </div>
             </CardContent>
-          </Card>
-        </>
+          </Card>        </>
       )}
+
+      {/* History Display */}
+      <HistoryDisplay calculatorType="tax" />
     </div>
   );
 }

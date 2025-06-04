@@ -19,6 +19,8 @@ import { getCPIDataForChart, getAvailableDateRange } from '@/lib/data/nigeria-cp
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar } from 'recharts';
 import { TrendingUp, Calculator, Calendar, DollarSign, AlertTriangle, Info } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { HistoryDisplay } from './HistoryDisplay';
+import { useCalculatorHistory } from '@/hooks/useCalculatorHistory';
 
 interface InflationFormData {
   amount: string;
@@ -27,6 +29,8 @@ interface InflationFormData {
 }
 
 export default function InflationCalculator() {
+  const { addRecord } = useCalculatorHistory();
+  
   const [formData, setFormData] = useState<InflationFormData>({
     amount: '',
     startDate: '',
@@ -66,13 +70,14 @@ export default function InflationCalculator() {
     };
 
     const validationErrors = validateInflationInputs(inputs);
-    setErrors(validationErrors);
-
-    if (validationErrors.length === 0 && inputs.amount && inputs.startDate && inputs.endDate) {
+    setErrors(validationErrors);    if (validationErrors.length === 0 && inputs.amount && inputs.startDate && inputs.endDate) {
       try {
         setIsCalculating(true);
         const inflationResult = calculateInflationResult(inputs as InflationInputs);
         setResult(inflationResult);
+        
+        // Add to history
+        addRecord('inflation', inputs, inflationResult);
       } catch (error) {
         console.error('Inflation calculation error:', error);
         setErrors([error instanceof Error ? error.message : 'Calculation error occurred']);
@@ -83,7 +88,7 @@ export default function InflationCalculator() {
     } else {
       setResult(null);
     }
-  }, [formData]);
+  }, [formData, addRecord]);
 
   // Calculate inflation whenever form data changes
   useEffect(() => {
@@ -422,8 +427,10 @@ export default function InflationCalculator() {
                   ))}
                 </ul>
               </CardContent>
-            </Card>
-          )}
+            </Card>          )}
+
+          {/* History Display */}
+          <HistoryDisplay calculatorType="inflation" />
         </div>
       )}
     </div>
