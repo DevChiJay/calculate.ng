@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { Menu } from "lucide-react";
 import { Navigation } from "./navigation";
@@ -17,6 +17,7 @@ export function Header() {
               </Button>
             </SheetTrigger>
             <SheetContent side="left" className="w-[240px] pr-0">
+              <SheetTitle className="sr-only">Navigation Menu</SheetTitle>
               <Navigation />
             </SheetContent>
           </Sheet>

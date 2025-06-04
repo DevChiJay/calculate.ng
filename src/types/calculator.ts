@@ -35,9 +35,8 @@ export interface FormValidationError {
 
 export interface CalculatorState<T> {
   data: T;
-  result: any;
+  result: TaxResult | BMIResult | InflationResult | null;
   errors: FormValidationError[];
-  isCalculating: boolean;
 }
 
 // Future Types for other calculators
@@ -62,25 +61,50 @@ export interface InflationResult {
   endCPI: number;
 }
 
-// Tax Calculator Types (placeholder)
+// Tax Calculator Types
 export interface TaxInputs {
-  annualIncome: number;
-  allowances: number;
-  reliefs: number;
+  grossIncome: number;
+  basicSalary?: number; // For NHF and NHIS calculations
+  monthlyEmolument?: number; // For pension calculations
+  lifeAssurancePremium?: number;
+  additionalReliefs?: {
+    disability?: boolean;
+    oldAge?: boolean; // 65 years and above
+    dependentRelatives?: number; // Number of dependent relatives
+  };
   paymentFrequency: 'monthly' | 'annual';
+  includeMinimumTax?: boolean;
 }
 
 export interface TaxResult {
   grossIncome: number;
+  totalAllowances: number;
   taxableIncome: number;
   incomeTax: number;
+  minimumTax: number;
+  finalTax: number; // Higher of income tax or minimum tax
   netIncome: number;
-  taxBrackets: TaxBracket[];
+  taxBrackets: TaxBracketResult[];
+  allowanceBreakdown: AllowanceBreakdown;
+  effectiveRate: number; // Final tax / gross income
+  marginalRate: number; // Tax rate for highest bracket
 }
 
-export interface TaxBracket {
+export interface TaxBracketResult {
   min: number;
   max: number | null;
   rate: number;
+  taxableAmount: number;
   taxAmount: number;
+  description: string;
+}
+
+export interface AllowanceBreakdown {
+  consolidatedRelief: number;
+  nationalHousingFund: number;
+  nhis: number;
+  pension: number;
+  lifeAssurance: number;
+  additionalReliefs: number;
+  total: number;
 }
