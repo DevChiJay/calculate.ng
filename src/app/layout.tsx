@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Header } from "@/components/layout/header";
 import { Sidebar } from "@/components/layout/sidebar";
+import { Footer } from "@/components/layout/footer";
 import { ThemeProvider } from "@/components/layout/theme-provider";
 import { CalculatorThemeProvider } from "@/components/layout/calculator-theme-provider";
 import dynamic from "next/dynamic";
@@ -50,11 +51,11 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <CalculatorThemeProvider>            <div className="relative flex min-h-screen flex-col">
-              <Header />
-              <div className="flex-1 flex">
+              <Header />              <div className="flex-1 flex">
                 <Sidebar />
                 <main id="main-content" className="flex-1" tabIndex={-1}>{children}</main>
               </div>
+              <Footer />
               {/* Only show in development */}
               {process.env.NODE_ENV === 'development' && <PerformanceIndicator />}
             </div>

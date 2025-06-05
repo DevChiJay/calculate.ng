@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { Sheet, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { Menu } from "lucide-react";
@@ -26,7 +27,13 @@ export function Header() {
         </div>
         <div className="flex w-full items-center space-x-4 md:space-x-6">
           <Link href="/" className="flex items-center space-x-2" aria-label="Calculate.ng Home">
-            <span className="font-bold">Calculate.ng</span>
+            <Image 
+              src="/logo.svg" 
+              alt="Calculate.ng Logo" 
+              width={168} 
+              height={48} 
+              className="h-12 w-42"
+            />
           </Link>
         </div>        
         <div className="flex flex-1 items-center justify-end space-x-4">
