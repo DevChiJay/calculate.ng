@@ -179,11 +179,30 @@ export default function EnhancedBMICalculator() {
               Body Measurements
             </AnimatedCardTitle>
           </AnimatedCardHeader>
-          <AnimatedCardContent>
-            <Tabs value={formData.unit} onValueChange={(value) => handleInputChange('unit', value)}>
-              <TabsList className="grid w-full grid-cols-2">
-                <TabsTrigger value="metric" animated>Metric (kg/cm)</TabsTrigger>
-                <TabsTrigger value="imperial" animated>Imperial (lbs/ft)</TabsTrigger>
+          <AnimatedCardContent>            <Tabs 
+              value={formData.unit} 
+              onValueChange={(value) => handleInputChange('unit', value)} 
+              aria-label="Unit system selector"
+            >
+              <TabsList className="grid w-full grid-cols-2" role="tablist">
+                <TabsTrigger 
+                  value="metric" 
+                  animated
+                  role="tab"
+                  aria-selected={formData.unit === 'metric'}
+                  tabIndex={formData.unit === 'metric' ? 0 : -1}
+                >
+                  Metric (kg/cm)
+                </TabsTrigger>
+                <TabsTrigger 
+                  value="imperial" 
+                  animated
+                  role="tab"
+                  aria-selected={formData.unit === 'imperial'}
+                  tabIndex={formData.unit === 'imperial' ? 0 : -1}
+                >
+                  Imperial (lbs/ft)
+                </TabsTrigger>
               </TabsList>
 
               <TabsContent value="metric" animated className="space-y-6">

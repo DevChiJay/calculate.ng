@@ -39,16 +39,24 @@ export function ModeToggle() {
         return <Monitor className="h-[1.2rem] w-[1.2rem]" />;
     }
   };
-
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline" size="icon" className="relative">
+        <Button 
+          variant="outline" 
+          size="icon" 
+          className="relative"
+          aria-label="Theme options"
+          aria-haspopup="true"
+        >
           {getThemeIcon()}
           <span className="sr-only">Toggle theme</span>
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end">
+      <DropdownMenuContent 
+        align="end"
+        role="menu"
+        aria-label="Theme options menu">
         <DropdownMenuItem onClick={() => setTheme("light")} className="flex items-center gap-2">
           <Sun className="h-4 w-4" />
           Light

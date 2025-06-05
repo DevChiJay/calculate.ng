@@ -29,23 +29,31 @@ export function ThemeSelector() {
       </Button>
     );
   }
-
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline" size="sm" className="gap-2">
-          <Palette className="h-4 w-4" />
+        <Button 
+          variant="outline" 
+          size="sm" 
+          className="gap-2"
+          aria-label="Select calculator theme"
+          aria-haspopup="true"
+        >
+          <Palette className="h-4 w-4" aria-hidden="true" />
           <span className="hidden sm:inline">
             {themeConfig[calculatorTheme].name}
           </span>
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-48">
+      <DropdownMenuContent align="end" className="w-48" role="menu" aria-label="Available themes">
         {Object.entries(themeConfig).map(([key, config]) => (
           <DropdownMenuItem
             key={key}
             onClick={() => setCalculatorTheme(key as CalculatorTheme)}
             className="flex items-center gap-3 p-3"
+            role="menuitem"
+            tabIndex={0}
+            aria-current={calculatorTheme === key ? "true" : undefined}
           >
             <div className="flex items-center gap-2">
               <span className="text-lg">{config.icon}</span>

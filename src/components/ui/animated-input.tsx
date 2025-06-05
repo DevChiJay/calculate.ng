@@ -34,6 +34,11 @@ const AnimatedInput = React.forwardRef<HTMLInputElement, AnimatedInputProps>(
     const [isFocused, setIsFocused] = React.useState(false)
     const [showPassword, setShowPassword] = React.useState(false)
     const [hasValue, setHasValue] = React.useState(false)
+    
+    // Generate unique IDs for accessibility
+    const inputId = React.useId();
+    const errorId = error ? `error-${inputId}` : undefined;
+    const successId = success ? `success-${inputId}` : undefined;
 
     const inputType = showPasswordToggle && showPassword ? 'text' : type
 
@@ -63,9 +68,9 @@ const AnimatedInput = React.forwardRef<HTMLInputElement, AnimatedInputProps>(
     }
 
     return (
-      <div className="relative">
-        {label && !floatingLabel && (
+      <div className="relative">        {label && !floatingLabel && (
           <motion.label
+            htmlFor={inputId}
             initial={animated ? { opacity: 0, y: -10 } : {}}
             animate={animated ? { opacity: 1, y: 0 } : {}}
             className="block text-sm font-medium text-foreground mb-2"
@@ -79,10 +84,9 @@ const AnimatedInput = React.forwardRef<HTMLInputElement, AnimatedInputProps>(
             <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground z-10">
               {leftIcon}
             </div>
-          )}
-
-          <motion.input
+          )}          <motion.input
             ref={ref}
+            id={inputId}
             type={inputType}
             className={cn(
               "flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 transition-all duration-200",
@@ -94,14 +98,18 @@ const AnimatedInput = React.forwardRef<HTMLInputElement, AnimatedInputProps>(
             )}
             onFocus={handleFocus}
             onBlur={handleBlur}
+            aria-invalid={!!error}
+            aria-describedby={cn(
+              errorId,
+              successId,
+            )}
             initial={animated ? { opacity: 0, scale: 0.95 } : {}}
             animate={animated ? { opacity: 1, scale: 1 } : {}}
             transition={{ duration: 0.2 }}
             {...props}
-          />
-
-          {label && floatingLabel && (
+          />          {label && floatingLabel && (
             <motion.label
+              htmlFor={inputId}
               className="absolute pointer-events-none transition-all duration-200 px-1 bg-background"
               variants={labelVariants}
               animate={isFocused || hasValue ? "focused" : "default"}
@@ -111,16 +119,18 @@ const AnimatedInput = React.forwardRef<HTMLInputElement, AnimatedInputProps>(
             </motion.label>
           )}
 
-          <div className="absolute right-3 top-1/2 transform -translate-y-1/2 flex items-center space-x-1">
-            {showPasswordToggle && type === 'password' && (
+          <div className="absolute right-3 top-1/2 transform -translate-y-1/2 flex items-center space-x-1">            {showPasswordToggle && type === 'password' && (
               <motion.button
                 type="button"
                 onClick={togglePasswordVisibility}
                 className="text-muted-foreground hover:text-foreground transition-colors"
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
+                aria-label={showPassword ? "Hide password" : "Show password"}
+                aria-controls={inputId}
+                aria-pressed={showPassword}
               >
-                {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                {showPassword ? <EyeOff size={16} aria-hidden="true" /> : <Eye size={16} aria-hidden="true" />}
               </motion.button>
             )}
 
@@ -150,11 +160,11 @@ const AnimatedInput = React.forwardRef<HTMLInputElement, AnimatedInputProps>(
               </div>
             )}
           </div>
-        </div>
-
-        <AnimatePresence>
+        </div>        <AnimatePresence>
           {error && (
             <motion.p
+              id={errorId}
+              role="alert"
               initial={animated ? { opacity: 0, y: -10, height: 0 } : {}}
               animate={animated ? { opacity: 1, y: 0, height: "auto" } : {}}
               exit={animated ? { opacity: 0, y: -10, height: 0 } : {}}
@@ -166,6 +176,8 @@ const AnimatedInput = React.forwardRef<HTMLInputElement, AnimatedInputProps>(
 
           {success && !error && (
             <motion.p
+              id={successId}
+              role="status"
               initial={animated ? { opacity: 0, y: -10, height: 0 } : {}}
               animate={animated ? { opacity: 1, y: 0, height: "auto" } : {}}
               exit={animated ? { opacity: 0, y: -10, height: 0 } : {}}
