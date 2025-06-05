@@ -1,4 +1,5 @@
 import InflationCalculator from '@/components/calculators/InflationCalculator';
+import { ThemedCalculatorPage } from '@/components/layout/themed-calculator-page';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -9,18 +10,12 @@ export const metadata: Metadata = {
 
 export default function InflationCalculatorPage() {
   return (
-    <div className="container mx-auto p-6">
-      <div className="space-y-6">
-        <div className="text-center space-y-2">
-          <h1 className="text-3xl font-bold">Nigerian Inflation Calculator</h1>
-          <p className="text-muted-foreground max-w-2xl mx-auto">
-            Understand how inflation impacts your purchasing power using official Consumer Price Index (CPI) data. 
-            Calculate what your money would be worth today and make informed financial decisions.
-          </p>
-        </div>
-        
-        <InflationCalculator />
-      </div>
-    </div>
+    <ThemedCalculatorPage
+      theme="inflation"
+      title="Nigerian Inflation Calculator"
+      description="Understand how inflation impacts your purchasing power using official Consumer Price Index (CPI) data. Calculate what your money would be worth today and make informed financial decisions."
+    >
+      <InflationCalculator />
+    </ThemedCalculatorPage>
   );
 }

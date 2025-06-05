@@ -3,6 +3,8 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Header } from "@/components/layout/header";
 import { Sidebar } from "@/components/layout/sidebar";
+import { ThemeProvider } from "@/components/layout/theme-provider";
+import { CalculatorThemeProvider } from "@/components/layout/calculator-theme-provider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -28,14 +30,22 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body
         className={`${geistSans.variable} ${geistMono.variable} min-h-screen bg-background font-sans antialiased`}
-      >
-        <div className="relative flex min-h-screen flex-col">
-          <Header />
-          <div className="flex-1 flex">
-            <Sidebar />
-            <main className="flex-1">{children}</main>
-          </div>
-        </div>
+      >        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <CalculatorThemeProvider>
+            <div className="relative flex min-h-screen flex-col">
+              <Header />
+              <div className="flex-1 flex">
+                <Sidebar />
+                <main className="flex-1">{children}</main>
+              </div>
+            </div>
+          </CalculatorThemeProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

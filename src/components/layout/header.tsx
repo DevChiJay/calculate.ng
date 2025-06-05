@@ -3,6 +3,8 @@ import { Sheet, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/s
 import { Button } from "@/components/ui/button";
 import { Menu } from "lucide-react";
 import { Navigation } from "./navigation";
+import { ModeToggle } from "./mode-toggle";
+import { ThemeSelector } from "./theme-selector";
 
 export function Header() {
   return (
@@ -26,6 +28,9 @@ export function Header() {
           <Link href="/" className="flex items-center space-x-2">
             <span className="font-bold">Calculate.ng</span>
           </Link>
+        </div>        <div className="flex flex-1 items-center justify-end space-x-4">
+          <ThemeSelector />
+          <ModeToggle />
         </div>
       </div>
     </header>

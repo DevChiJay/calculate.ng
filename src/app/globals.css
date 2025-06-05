@@ -74,8 +74,34 @@
   --sidebar-primary-foreground: oklch(0.985 0 0);
   --sidebar-accent: oklch(0.97 0 0);
   --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
+  --sidebar-border: oklch(0.922 0 0);  --sidebar-ring: oklch(0.708 0 0);
+  
+  /* BMI Calculator - Ocean Blues & Greens */
+  --bmi-primary: oklch(0.55 0.25 220);
+  --bmi-primary-foreground: oklch(0.98 0 0);
+  --bmi-secondary: oklch(0.65 0.20 160);
+  --bmi-accent: oklch(0.75 0.15 180);
+  --bmi-background: oklch(0.98 0.02 220);
+  --bmi-card: oklch(0.99 0.01 220);
+  --bmi-muted: oklch(0.94 0.02 220);
+  
+  /* Tax Calculator - Professional Purples & Golds */
+  --tax-primary: oklch(0.50 0.25 280);
+  --tax-primary-foreground: oklch(0.98 0 0);
+  --tax-secondary: oklch(0.75 0.15 45);
+  --tax-accent: oklch(0.85 0.10 45);
+  --tax-background: oklch(0.98 0.02 280);
+  --tax-card: oklch(0.99 0.01 280);
+  --tax-muted: oklch(0.94 0.02 280);
+  
+  /* Inflation Calculator - Warm Oranges & Reds */
+  --inflation-primary: oklch(0.60 0.25 35);
+  --inflation-primary-foreground: oklch(0.98 0 0);
+  --inflation-secondary: oklch(0.70 0.20 15);
+  --inflation-accent: oklch(0.80 0.15 25);
+  --inflation-background: oklch(0.98 0.02 35);
+  --inflation-card: oklch(0.99 0.01 35);
+  --inflation-muted: oklch(0.94 0.02 35);
 }
 
 .dark {
@@ -107,9 +133,35 @@
   --sidebar-primary: oklch(0.488 0.243 264.376);
   --sidebar-primary-foreground: oklch(0.985 0 0);
   --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
+  --sidebar-accent-foreground: oklch(0.985 0 0);  --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
+  
+  /* BMI Calculator Dark - Ocean Blues & Greens */
+  --bmi-primary: oklch(0.65 0.25 220);
+  --bmi-primary-foreground: oklch(0.15 0 0);
+  --bmi-secondary: oklch(0.45 0.20 160);
+  --bmi-accent: oklch(0.55 0.15 180);
+  --bmi-background: oklch(0.16 0.02 220);
+  --bmi-card: oklch(0.22 0.02 220);
+  --bmi-muted: oklch(0.25 0.02 220);
+  
+  /* Tax Calculator Dark - Professional Purples & Golds */
+  --tax-primary: oklch(0.70 0.25 280);
+  --tax-primary-foreground: oklch(0.15 0 0);
+  --tax-secondary: oklch(0.55 0.15 45);
+  --tax-accent: oklch(0.65 0.10 45);
+  --tax-background: oklch(0.16 0.02 280);
+  --tax-card: oklch(0.22 0.02 280);
+  --tax-muted: oklch(0.25 0.02 280);
+  
+  /* Inflation Calculator Dark - Warm Oranges & Reds */
+  --inflation-primary: oklch(0.70 0.25 35);
+  --inflation-primary-foreground: oklch(0.15 0 0);
+  --inflation-secondary: oklch(0.50 0.20 15);
+  --inflation-accent: oklch(0.60 0.15 25);
+  --inflation-background: oklch(0.16 0.02 35);
+  --inflation-card: oklch(0.22 0.02 35);
+  --inflation-muted: oklch(0.25 0.02 35);
 }
 
 @layer base {
@@ -118,5 +170,82 @@
   }
   body {
     @apply bg-background text-foreground;
+  }
+}
+
+@layer components {
+  /* BMI Calculator Theme */
+  .bmi-theme {
+    --primary: var(--bmi-primary);
+    --primary-foreground: var(--bmi-primary-foreground);
+    --secondary: var(--bmi-secondary);
+    --accent: var(--bmi-accent);
+    --background: var(--bmi-background);
+    --card: var(--bmi-card);
+    --muted: var(--bmi-muted);
+  }
+  
+  /* Tax Calculator Theme */
+  .tax-theme {
+    --primary: var(--tax-primary);
+    --primary-foreground: var(--tax-primary-foreground);
+    --secondary: var(--tax-secondary);
+    --accent: var(--tax-accent);
+    --background: var(--tax-background);
+    --card: var(--tax-card);
+    --muted: var(--tax-muted);
+  }
+  
+  /* Inflation Calculator Theme */
+  .inflation-theme {
+    --primary: var(--inflation-primary);
+    --primary-foreground: var(--inflation-primary-foreground);
+    --secondary: var(--inflation-secondary);
+    --accent: var(--inflation-accent);
+    --background: var(--inflation-background);
+    --card: var(--inflation-card);
+    --muted: var(--inflation-muted);
+  }
+  
+  /* Theme-specific gradient backgrounds */
+  .bmi-gradient {
+    background: linear-gradient(135deg, var(--bmi-background) 0%, var(--bmi-accent) 100%);
+  }
+  
+  .tax-gradient {
+    background: linear-gradient(135deg, var(--tax-background) 0%, var(--tax-accent) 100%);
+  }
+  
+  .inflation-gradient {
+    background: linear-gradient(135deg, var(--inflation-background) 0%, var(--inflation-accent) 100%);
+  }
+  
+  /* Animated gradient cards */
+  .calculator-card {
+    @apply relative overflow-hidden;
+    background: var(--card);
+    border: 1px solid oklch(from var(--primary) l c h / 0.2);
+    transition: all 0.3s ease;
+  }
+  
+  .calculator-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, oklch(from var(--primary) l c h / 0.1), transparent);
+    transition: left 0.5s ease;
+  }
+  
+  .calculator-card:hover::before {
+    left: 100%;
+  }
+  
+  .calculator-card:hover {
+    border-color: oklch(from var(--primary) l c h / 0.4);
+    box-shadow: 0 10px 25px oklch(from var(--primary) l c h / 0.15);
+    transform: translateY(-2px);
   }
 }
