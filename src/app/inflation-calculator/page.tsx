@@ -1,5 +1,6 @@
-import InflationCalculator from '@/components/calculators/InflationCalculator';
+import EnhancedInflationCalculator from '@/components/calculators/EnhancedInflationCalculator';
 import { ThemedCalculatorPage } from '@/components/layout/themed-calculator-page';
+import { ToastProvider } from '@/components/ui/toast';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -10,12 +11,14 @@ export const metadata: Metadata = {
 
 export default function InflationCalculatorPage() {
   return (
-    <ThemedCalculatorPage
-      theme="inflation"
-      title="Nigerian Inflation Calculator"
-      description="Understand how inflation impacts your purchasing power using official Consumer Price Index (CPI) data. Calculate what your money would be worth today and make informed financial decisions."
-    >
-      <InflationCalculator />
-    </ThemedCalculatorPage>
+    <ToastProvider>
+      <ThemedCalculatorPage
+        theme="inflation"
+        title="Nigerian Inflation Calculator"
+        description="Understand how inflation impacts your purchasing power using official Consumer Price Index (CPI) data. Calculate what your money would be worth today and make informed financial decisions."
+      >
+        <EnhancedInflationCalculator />
+      </ThemedCalculatorPage>
+    </ToastProvider>
   );
 }

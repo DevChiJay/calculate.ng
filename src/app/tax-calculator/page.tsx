@@ -1,6 +1,7 @@
 import { Metadata } from 'next';
-import TaxCalculator from '@/components/calculators/TaxCalculator';
+import EnhancedTaxCalculator from '@/components/calculators/EnhancedTaxCalculator';
 import { ThemedCalculatorPage } from '@/components/layout/themed-calculator-page';
+import { ToastProvider } from '@/components/ui/toast';
 
 export const metadata: Metadata = {
   title: 'Nigerian Income Tax Calculator | Calculate.ng',
@@ -18,12 +19,14 @@ export const metadata: Metadata = {
 
 export default function TaxCalculatorPage() {
   return (
-    <ThemedCalculatorPage
-      theme="tax"
-      title="Nigerian Income Tax Calculator"
-      description="Calculate your income tax based on current Nigerian tax brackets, allowances, and reliefs. Get detailed breakdown and optimization suggestions."
-    >
-      <TaxCalculator />
-    </ThemedCalculatorPage>
+    <ToastProvider>
+      <ThemedCalculatorPage
+        theme="tax"
+        title="Nigerian Income Tax Calculator"
+        description="Calculate your income tax based on current Nigerian tax brackets, allowances, and reliefs. Get detailed breakdown and optimization suggestions."
+      >
+        <EnhancedTaxCalculator />
+      </ThemedCalculatorPage>
+    </ToastProvider>
   );
 }

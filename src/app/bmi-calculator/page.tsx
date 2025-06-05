@@ -1,6 +1,7 @@
 import { Metadata } from 'next';
-import BMICalculator from '@/components/calculators/BMICalculator';
+import EnhancedBMICalculator from '@/components/calculators/EnhancedBMICalculator';
 import { ThemedCalculatorPage } from '@/components/layout/themed-calculator-page';
+import { ToastProvider } from '@/components/ui/toast';
 
 export const metadata: Metadata = {
   title: 'BMI Calculator - Body Mass Index Calculator | Calculate.ng',
@@ -24,12 +25,14 @@ export const metadata: Metadata = {
 
 export default function BMICalculatorPage() {
   return (
-    <ThemedCalculatorPage
-      theme="bmi"
-      title="BMI Calculator"
-      description="Calculate your Body Mass Index and get personalized health insights with support for both metric and imperial units."
-    >
-      <BMICalculator />
-    </ThemedCalculatorPage>
+    <ToastProvider>
+      <ThemedCalculatorPage
+        theme="bmi"
+        title="BMI Calculator"
+        description="Calculate your Body Mass Index and get personalized health insights with support for both metric and imperial units."
+      >
+        <EnhancedBMICalculator />
+      </ThemedCalculatorPage>
+    </ToastProvider>
   );
 }
