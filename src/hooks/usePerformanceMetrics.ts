@@ -9,12 +9,23 @@ interface LayoutShift extends PerformanceEntry {
   hadRecentInput: boolean;
 }
 
+// Interface for Resource Timing
+interface ResourceTiming {
+  name: string;
+  duration: number;
+  transferSize: number;
+}
+
 type PerformanceMetrics = {
   fcp: number | null; // First Contentful Paint
   lcp: number | null; // Largest Contentful Paint
   fid: number | null; // First Input Delay
   cls: number | null; // Cumulative Layout Shift
   ttfb: number | null; // Time to First Byte
+  fmp: number | null; // First Meaningful Paint (estimated)
+  resources: ResourceTiming[]; // Resource timings
+  jsHeapSize: number | null; // JavaScript heap size (if available)
+  domNodes: number | null; // Number of DOM nodes
   measured: boolean;
 };
 
@@ -22,13 +33,16 @@ type PerformanceMetrics = {
  * Hook to measure web vitals performance metrics
  * Uses the Web Vitals API to collect core metrics
  */
-export function usePerformanceMetrics() {
-  const [metrics, setMetrics] = useState<PerformanceMetrics>({
+export function usePerformanceMetrics() {  const [metrics, setMetrics] = useState<PerformanceMetrics>({
     fcp: null,
     lcp: null,
     fid: null, 
     cls: null,
     ttfb: null,
+    fmp: null,
+    resources: [],
+    jsHeapSize: null,
+    domNodes: null,
     measured: false
   });
   
@@ -125,10 +139,58 @@ export function usePerformanceMetrics() {
         );
         
         clsObserver.observe({ type: 'layout-shift', buffered: true });
-      }
+      }      // Resource timing
+      const resourceObserver = new PerformanceObserver(
+        throttle((entryList) => {
+          const resources = entryList.getEntries()
+            .filter((entry: PerformanceEntry) => entry.entryType === 'resource')
+            .slice(0, 20) // Limit to first 20 resources
+            .map((entry: PerformanceEntry) => ({
+              name: entry.name.split('/').pop() || entry.name,
+              duration: Math.round(entry.duration),
+              transferSize: (entry as PerformanceResourceTiming).transferSize || 0
+            }));
+          
+          setMetrics(prev => ({ 
+            ...prev, 
+            resources: resources as ResourceTiming[]
+          }));
+        }, 1000)
+      );
       
-      // Mark as measured
+      resourceObserver.observe({ type: 'resource', buffered: true });
+      
+      // Estimate First Meaningful Paint - based on when key hero elements load
+      const markFMP = () => {
+        // Check if hero section is loaded
+        const heroElement = document.querySelector('.calculator-card');
+        if (heroElement) {
+          const fmpTime = performance.now();
+          setMetrics(prev => ({ ...prev, fmp: fmpTime }));
+        }
+      };
+      
+      // Run FMP detection once DOM is certainly ready
+      setTimeout(markFMP, 1000);
+      
+      // Count DOM nodes
+      const countDOMNodes = () => {
+        const domNodes = document.querySelectorAll('*').length;
+        setMetrics(prev => ({ ...prev, domNodes }));
+      };
+        // Check memory usage if available
+      const checkMemoryUsage = () => {
+        // Chrome exposes memory info, but it's non-standard
+        const perf = performance as unknown as { memory?: { usedJSHeapSize: number } };
+        if (perf.memory) {
+          const jsHeapSize = perf.memory.usedJSHeapSize;
+          setMetrics(prev => ({ ...prev, jsHeapSize }));
+        }
+      };
+      
       setTimeout(() => {
+        countDOMNodes();
+        checkMemoryUsage();
         setMetrics(prev => ({ ...prev, measured: true }));
       }, 5000); // Wait a reasonable time to collect metrics
       

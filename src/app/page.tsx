@@ -14,20 +14,20 @@ const calculators = [
     color: "from-blue-500 to-cyan-500",
   },
   {
-    title: "Tax Calculator",
-    description: "Calculate Nigerian income tax with current brackets and allowances",
-    icon: DollarSign,
-    href: "/tax-calculator",
-    theme: "Royal",
-    color: "from-purple-500 to-pink-500",
-  },
-  {
     title: "Inflation Calculator",
     description: "Track inflation impact using Consumer Price Index data",
     icon: TrendingUp,
     href: "/inflation-calculator",
     theme: "Sunset",
     color: "from-orange-500 to-red-500",
+  },
+  {
+    title: "Tax Calculator",
+    description: "Calculate Nigerian income tax with current brackets and allowances",
+    icon: DollarSign,
+    href: "/tax-calculator",
+    theme: "Royal",
+    color: "from-purple-500 to-pink-500",
   },
 ];
 
