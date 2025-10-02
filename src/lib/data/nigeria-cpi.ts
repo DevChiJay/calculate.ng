@@ -201,12 +201,15 @@ export function getCPIDataForChart(startYear: number, endYear: number): CPIDataP
  * Get the most recent CPI data point
  */
 export function getLatestCPI(): CPIDataPoint {
+  // Retained static implementation for synchronous consumers; dynamic async version in cpi-source
   return NIGERIA_CPI_DATA.reduce((latest, current) => {
     const latestDate = new Date(latest.year, latest.month - 1);
     const currentDate = new Date(current.year, current.month - 1);
     return currentDate > latestDate ? current : latest;
   });
 }
+
+// NOTE: Async data access layer available at '@/lib/data/cpi-source'
 
 /**
  * Get year-over-year inflation rate for a specific period
