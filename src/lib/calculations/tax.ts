@@ -14,6 +14,7 @@ import {
   getTaxBracketInfo
 } from '@/lib/data/nigeria-tax-brackets';
 import type { TaxInputs, TaxResult, TaxBracketResult, AllowanceBreakdown } from '@/types/calculator';
+// Formatting utilities available at '@/lib/utils/format' if needed by consumers.
 
 export interface TaxValidationError {
   field: string;
@@ -203,24 +204,7 @@ export function calculateTaxResult(inputs: TaxInputs): TaxResult {
   };
 }
 
-/**
- * Format currency for Nigerian Naira
- */
-export function formatNGN(amount: number): string {
-  return new Intl.NumberFormat('en-NG', {
-    style: 'currency',
-    currency: 'NGN',
-    minimumFractionDigits: 0,
-    maximumFractionDigits: 0
-  }).format(amount);
-}
-
-/**
- * Format percentage
- */
-export function formatPercentage(value: number, decimals: number = 1): string {
-  return `${value.toFixed(decimals)}%`;
-}
+// formatNGN and formatPercentage are now imported from shared utils.
 
 /**
  * Convert annual income to monthly

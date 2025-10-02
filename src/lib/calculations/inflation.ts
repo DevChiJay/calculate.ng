@@ -4,6 +4,7 @@
  */
 
 import { getCPIForDate, getAvailableDateRange } from '@/lib/data/nigeria-cpi';
+// Formatting utilities available via '@/lib/utils/format' for consumers.
 
 export interface InflationInputs {
   amount: number;
@@ -141,24 +142,7 @@ export function calculateInflationResult(inputs: InflationInputs): InflationResu
   };
 }
 
-/**
- * Format currency for Nigerian Naira
- */
-export function formatNGN(amount: number): string {
-  return new Intl.NumberFormat('en-NG', {
-    style: 'currency',
-    currency: 'NGN',
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2
-  }).format(amount);
-}
-
-/**
- * Format percentage
- */
-export function formatPercentage(value: number, decimals: number = 2): string {
-  return `${value.toFixed(decimals)}%`;
-}
+// formatNGN and formatPercentage now sourced from shared utils.
 
 /**
  * Get inflation interpretation based on rate
