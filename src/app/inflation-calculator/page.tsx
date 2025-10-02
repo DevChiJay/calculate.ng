@@ -53,6 +53,36 @@ export default function InflationCalculatorPage() {
         title="Nigerian Inflation Calculator"
         description="Understand how inflation impacts your purchasing power using official Consumer Price Index (CPI) data. Calculate what your money would be worth today and make informed financial decisions."
       >
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              '@context': 'https://schema.org',
+              '@type': 'WebApplication',
+              name: 'Nigerian Inflation Calculator',
+              description: 'Tool to compute purchasing power changes and cumulative inflation using Nigerian CPI data.',
+              applicationCategory: 'FinanceApplication',
+              url: 'https://calculate.ng/inflation-calculator',
+              provider: {
+                '@type': 'Organization',
+                name: 'Calculate.ng',
+                url: 'https://calculate.ng'
+              },
+              featureList: [
+                'Purchasing power analysis',
+                'Cumulative inflation calculation',
+                'Annualized inflation rate'
+              ],
+              keywords: [
+                'Nigeria inflation calculator',
+                'CPI Nigeria',
+                'purchasing power',
+                'economic indicators'
+              ],
+              inLanguage: 'en-NG'
+            })
+          }}
+        />
         <EnhancedInflationCalculator />
       </ThemedCalculatorPage>
     </ToastProvider>

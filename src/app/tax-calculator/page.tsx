@@ -67,6 +67,37 @@ export default function TaxCalculatorPage() {
         title="Nigerian Income Tax Calculator"
         description="Calculate your income tax based on current Nigerian tax brackets, allowances, and reliefs. Get detailed breakdown and optimization suggestions."
       >
+        <script
+          type="application/ld+json"
+          // Using JSON.stringify for safe embedding
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              '@context': 'https://schema.org',
+              '@type': 'FinancialProduct',
+              name: 'Nigerian Income Tax Calculator',
+              description: 'Interactive PAYE tax calculator for Nigeria with current tax brackets, allowances and reliefs.',
+              applicationCategory: 'FinanceApplication',
+              url: 'https://calculate.ng/tax-calculator',
+              provider: {
+                '@type': 'Organization',
+                name: 'Calculate.ng',
+                url: 'https://calculate.ng'
+              },
+              audience: {
+                '@type': 'Audience',
+                audienceType: 'Employees & Tax Payers in Nigeria'
+              },
+              keywords: [
+                'Nigerian tax calculator',
+                'PAYE Nigeria',
+                'income tax brackets',
+                'FIRS tax',
+                'tax relief allowances'
+              ],
+              inLanguage: 'en-NG'
+            })
+          }}
+        />
         <EnhancedTaxCalculator />
       </ThemedCalculatorPage>
     </ToastProvider>
