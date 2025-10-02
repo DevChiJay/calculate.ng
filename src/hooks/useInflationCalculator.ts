@@ -34,6 +34,12 @@ const DEFAULT_FORM: InflationFormState = {
 
 function getCurrentYear() { return new Date().getFullYear(); }
 function buildYearOptions(): string[] { const arr: string[] = []; const current = getCurrentYear(); for (let y = 2010; y <= current; y++) arr.push(y.toString()); return arr; }
+function validateYearRange(start: string, end: string): string | null {
+  if (!start || !end) return null;
+  const s = Number(start); const e = Number(end);
+  if (!Number.isNaN(s) && !Number.isNaN(e) && s > e) return 'Start year cannot be after end year';
+  return null;
+}
 
 export function useInflationCalculator(options: UseInflationCalculatorOptions = {}): UseInflationCalculatorReturn {
   const { auto = true, debounceMs = 500 } = options;
@@ -59,17 +65,19 @@ export function useInflationCalculator(options: UseInflationCalculatorOptions = 
 
   const calculate = useCallback(() => {
     const initialAmount = parseFloat(form.initialAmount);
-    const startYear = parseInt(form.startYear);
-    const endYear = parseInt(form.endYear);
+    // Explicitly reference startYear / endYear to satisfy linter and add validation
+    const { startYear, endYear } = form;
 
     const inputs: Partial<InflationInputs> = {
       amount: isNaN(initialAmount) ? undefined : initialAmount,
-      startDate: `${form.startYear}-01`,
-      endDate: `${form.endYear}-12`,
+      startDate: `${startYear}-01`,
+      endDate: `${endYear}-12`,
       currency: 'NGN'
     };
 
     const validationErrors = validateInflationInputs(inputs);
+    const yrErr = validateYearRange(startYear, endYear);
+    if (yrErr) validationErrors.push(yrErr);
     setErrors(validationErrors);
 
     if (validationErrors.length === 0 && inputs.amount) {

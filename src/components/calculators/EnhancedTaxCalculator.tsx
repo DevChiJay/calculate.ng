@@ -20,8 +20,8 @@ export default function EnhancedTaxCalculator() {
   const { addToast } = useToast()
   const { form, setForm, reset, result, errors, isCalculating, progress, calculate } = useTaxCalculator()
 
-  const handleInputChange = useCallback((field: keyof typeof form, value: string) => {
-    setForm(field, value as any)
+  const handleInputChange = useCallback(<K extends keyof typeof form>(field: K, value: typeof form[K]) => {
+    setForm(field, value)
   }, [setForm])
 
   const resetForm = useCallback(() => {
@@ -110,7 +110,7 @@ export default function EnhancedTaxCalculator() {
 
                 <div className="space-y-2">
                   <label className="text-sm font-medium">Calculation Type</label>
-                  <Tabs value={form.calculationType} onValueChange={(value) => handleInputChange('calculationType', value)}>
+                  <Tabs value={form.calculationType} onValueChange={(value) => handleInputChange('calculationType', value as typeof form.calculationType)}>
                     <TabsList className="grid w-full grid-cols-2">
                       <TabsTrigger value="annual" animated>Annual</TabsTrigger>
                       <TabsTrigger value="monthly" animated>Monthly</TabsTrigger>
