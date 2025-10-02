@@ -39,7 +39,7 @@ export const metadata: Metadata = {
   title: "Calculate.ng | Nigerian Calculator Suite",
   description: "Your comprehensive Nigerian calculator suite featuring BMI, Tax, and Inflation calculators with beautiful themes and modern design.",
   keywords: "Nigerian calculator, BMI calculator, tax calculator, inflation calculator, Nigeria",
-  authors: [{ name: "Calculate.ng Team" }],
+  authors: [{ name: "Devchi Digital" }],
   creator: "Calculate.ng",
   publisher: "Calculate.ng",
   formatDetection: {

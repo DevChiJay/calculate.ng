@@ -39,11 +39,11 @@ export function Footer() {
           <div className="flex flex-col items-center md:items-start space-y-3">
             <h3 className="text-sm font-semibold mb-2">Contact Us</h3>
             <Link 
-              href="mailto:contact@calculate.ng" 
+              href="mailto:support@devchi.me" 
               className="flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors"
             >
               <Mail className="h-4 w-4" />
-              contact@calculate.ng
+              support@devchi.me
             </Link>
             <Link 
               href="tel:+2347011655197" 
@@ -86,7 +86,7 @@ export function Footer() {
         {/* Bottom section with copyright */}
         <div className="flex flex-col md:flex-row justify-between items-center">
           <p className="text-sm text-muted-foreground mb-4 md:mb-0">
-            © {currentYear} DevChi. All rights reserved.
+            © {currentYear} <a href="https://devchi.me">Devchi Digital</a>. All rights reserved.
           </p>
           <p className="text-sm text-muted-foreground flex items-center">
             Made with <Heart className="h-3 w-3 text-red-500 mx-1" /> in Nigeria
