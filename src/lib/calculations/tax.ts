@@ -59,26 +59,42 @@ export function validateTaxInputs(inputs: Partial<TaxInputs>): string[] {
  * Calculate allowances and reliefs
  */
 export function calculateAllowances(inputs: TaxInputs): AllowanceBreakdown {
+  // Retained for backward compatibility; now delegates to applyDeductions for core logic
+  return applyDeductions(inputs);
+}
+
+/**
+ * NEW: Expose personal income tax brackets (abstraction for future dynamic sourcing)
+ */
+export function getPersonalIncomeTaxBrackets() {
+  return [...NIGERIA_TAX_BRACKETS]; // return a shallow copy to avoid accidental mutation
+}
+
+/**
+ * NEW: Calculate Consolidated Relief Allowance (wrapper for data-layer function)
+ */
+export function calculateConsolidatedReliefAllowance(gross: number) {
+  return calculateConsolidatedRelief(gross);
+}
+
+/**
+ * NEW: Apply statutory deductions & additional reliefs producing the AllowanceBreakdown
+ * This centralizes deduction logic to keep calculateTaxResult lean & testable.
+ */
+export function applyDeductions(inputs: TaxInputs): AllowanceBreakdown {
   const grossIncome = inputs.grossIncome;
-  const basicSalary = inputs.basicSalary || grossIncome * 0.7; // Default to 70% if not specified
+  const basicSalary = inputs.basicSalary || grossIncome * 0.7; // Default heuristic
   const monthlyEmolument = inputs.monthlyEmolument || grossIncome / 12;
 
-  // Consolidated Relief Allowance
-  const consolidatedRelief = calculateConsolidatedRelief(grossIncome);
-
-  // National Housing Fund
+  const consolidatedRelief = calculateConsolidatedReliefAllowance(grossIncome);
   const nationalHousingFund = calculateNHF(basicSalary);
-
-  // NHIS
   const nhis = calculateNHIS(basicSalary);
-
-  // Pension (8% of annual emolument)
   const pension = calculatePension(monthlyEmolument);
 
-  // Life Assurance Premium Relief (15% of premium or 20% of net income after other reliefs)
+  // Life Assurance Premium Relief (15% of premium or 20% of net after other reliefs)
   let lifeAssurance = 0;
   if (inputs.lifeAssurancePremium && inputs.lifeAssurancePremium > 0) {
-    const grossLessOtherReliefs = grossIncome - consolidatedRelief - nationalHousingFund - nhis - pension;
+    const grossLessOtherReliefs = grossIncome - (consolidatedRelief + nationalHousingFund + nhis + pension);
     const twentyPercentOfNet = grossLessOtherReliefs * 0.20;
     const fifteenPercentOfPremium = inputs.lifeAssurancePremium * 0.15;
     lifeAssurance = Math.min(fifteenPercentOfPremium, twentyPercentOfNet);
@@ -87,14 +103,11 @@ export function calculateAllowances(inputs: TaxInputs): AllowanceBreakdown {
   // Additional Reliefs
   let additionalReliefs = 0;
   if (inputs.additionalReliefs) {
-    if (inputs.additionalReliefs.disability) {
-      additionalReliefs += ADDITIONAL_RELIEFS.DISABILITY_RELIEF.amount;
-    }
-    if (inputs.additionalReliefs.oldAge) {
-      additionalReliefs += ADDITIONAL_RELIEFS.OLD_AGE_RELIEF.amount;
-    }
-    if (inputs.additionalReliefs.dependentRelatives) {
-      additionalReliefs += inputs.additionalReliefs.dependentRelatives * ADDITIONAL_RELIEFS.DEPENDENT_RELATIVE_RELIEF.amount;
+    const { disability, oldAge, dependentRelatives } = inputs.additionalReliefs;
+    if (disability) additionalReliefs += ADDITIONAL_RELIEFS.DISABILITY_RELIEF.amount;
+    if (oldAge) additionalReliefs += ADDITIONAL_RELIEFS.OLD_AGE_RELIEF.amount;
+    if (dependentRelatives) {
+      additionalReliefs += dependentRelatives * ADDITIONAL_RELIEFS.DEPENDENT_RELATIVE_RELIEF.amount;
     }
   }
 
@@ -159,39 +172,21 @@ export function calculateMinimumTax(grossIncome: number): number {
  */
 export function calculateTaxResult(inputs: TaxInputs): TaxResult {
   const validationErrors = validateTaxInputs(inputs);
-  if (validationErrors.length > 0) {
-    throw new Error(validationErrors[0]);
-  }
+  if (validationErrors.length > 0) throw new Error(validationErrors[0]);
 
   const grossIncome = inputs.grossIncome;
-  
-  // Calculate allowances and reliefs
-  const allowanceBreakdown = calculateAllowances(inputs);
-  const totalAllowances = allowanceBreakdown.total;
-
-  // Calculate taxable income
-  const taxableIncome = Math.max(0, grossIncome - totalAllowances);
-
-  // Calculate income tax using progressive brackets
+  const allowanceBreakdown = applyDeductions(inputs); // single point for deductions
+  const taxableIncome = Math.max(0, grossIncome - allowanceBreakdown.total);
   const { tax: incomeTax, brackets: taxBrackets } = calculateIncomeTax(taxableIncome);
-
-  // Calculate minimum tax
   const minimumTax = inputs.includeMinimumTax ? calculateMinimumTax(grossIncome) : 0;
-
-  // Final tax is the higher of income tax or minimum tax
   const finalTax = Math.max(incomeTax, minimumTax);
-
-  // Calculate net income
   const netIncome = grossIncome - finalTax;
-
-  // Calculate effective and marginal rates
   const effectiveRate = grossIncome > 0 ? (finalTax / grossIncome) * 100 : 0;
-  const marginalBracket = getTaxBracketInfo(taxableIncome);
-  const marginalRate = marginalBracket ? marginalBracket.rate : 0;
+  const marginalRate = getTaxBracketInfo(taxableIncome)?.rate ?? 0;
 
   return {
     grossIncome,
-    totalAllowances,
+    totalAllowances: allowanceBreakdown.total,
     taxableIncome,
     incomeTax,
     minimumTax,
