@@ -49,7 +49,7 @@ export default function EnhancedInflationCalculator() {
         <motion.div className="text-center space-y-4">
           <FloatingElement direction="circular" duration={6}>
             <div className="inline-flex items-center justify-center w-16 h-16 bg-primary/10 rounded-full">
-              <TrendingUp className="w-8 h-8 text-primary" />
+              <TrendingUp className="w-8 h-8 text-primary" aria-hidden="true" />
             </div>
           </FloatingElement>
           <div>
@@ -62,7 +62,7 @@ export default function EnhancedInflationCalculator() {
         <AnimatedCard className="max-w-4xl mx-auto border-blue-200 bg-blue-50/50">
           <AnimatedCardContent className="pt-6">
             <div className="flex items-start gap-3">
-              <Info className="w-5 h-5 text-blue-500 mt-0.5 flex-shrink-0" />
+              <Info className="w-5 h-5 text-blue-500 mt-0.5 flex-shrink-0" aria-hidden="true" />
               <div className="text-sm text-blue-800">
                 <p className="font-medium mb-1">About Nigerian Inflation</p>
                 <p>
@@ -79,7 +79,7 @@ export default function EnhancedInflationCalculator() {
           <AnimatedCard glowEffect>
             <AnimatedCardHeader>
               <AnimatedCardTitle className="flex items-center gap-2">
-                <DollarSign className="w-5 h-5" />
+                <DollarSign className="w-5 h-5" aria-hidden="true" />
                 Amount & Period
               </AnimatedCardTitle>
             </AnimatedCardHeader>
@@ -93,7 +93,7 @@ export default function EnhancedInflationCalculator() {
                   type="number"
                   min="0"
                   step="1000"
-                  leftIcon={<DollarSign className="w-4 h-4" />}
+                  leftIcon={<DollarSign className="w-4 h-4" aria-hidden="true" />}
                   error={errors.find(e => e.includes('amount'))}
                   floatingLabel
                   animated
@@ -213,7 +213,7 @@ export default function EnhancedInflationCalculator() {
             className="space-y-6"
           >
             {/* Summary Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-6">              <AnimatedCard className="text-center" glowEffect>
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-6" aria-live="polite" aria-label="Inflation analysis summary">              <AnimatedCard className="text-center" glowEffect>
                 <AnimatedCardContent className="pt-6">
                   <FloatingElement direction="up" amplitude={3}>
                     <div className={cn("text-2xl font-bold", getInflationImpactColor(result.totalInflation))}>

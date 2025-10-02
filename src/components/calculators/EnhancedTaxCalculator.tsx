@@ -61,7 +61,7 @@ export default function EnhancedTaxCalculator() {
         <motion.div className="text-center space-y-4">
           <FloatingElement direction="circular" duration={5}>
             <div className="inline-flex items-center justify-center w-16 h-16 bg-primary/10 rounded-full">
-              <Calculator className="w-8 h-8 text-primary" />
+              <Calculator className="w-8 h-8 text-primary" aria-hidden="true" />
             </div>
           </FloatingElement>
           <div>
@@ -75,7 +75,7 @@ export default function EnhancedTaxCalculator() {
           <AnimatedCard glowEffect>
             <AnimatedCardHeader>
               <AnimatedCardTitle className="flex items-center gap-2">
-                <DollarSign className="w-5 h-5" />
+                <DollarSign className="w-5 h-5" aria-hidden="true" />
                 Income Information
               </AnimatedCardTitle>
             </AnimatedCardHeader>
@@ -89,7 +89,7 @@ export default function EnhancedTaxCalculator() {
                   type="number"
                   min="0"
                   step="1000"
-                  leftIcon={<DollarSign className="w-4 h-4" />}
+                  leftIcon={<DollarSign className="w-4 h-4" aria-hidden="true" />}
                   error={errors.find(e => e.includes('salary'))}
                   floatingLabel
                   animated
@@ -207,7 +207,7 @@ export default function EnhancedTaxCalculator() {
             className="space-y-6"
           >
             {/* Summary Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6" aria-live="polite" aria-label="Tax calculation summary">
               <AnimatedCard className="text-center" glowEffect>
                 <AnimatedCardContent className="pt-6">                  <FloatingElement direction="up" amplitude={3}>
                     <div className="text-3xl font-bold text-green-500">
