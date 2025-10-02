@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect, useCallback } from 'react'
+import { useCallback } from 'react'
 import { motion } from 'framer-motion'
 import { AnimatedCard, AnimatedCardContent, AnimatedCardHeader, AnimatedCardTitle } from '@/components/ui/animated-card'
 import { AnimatedInput } from '@/components/ui/animated-input'
@@ -11,121 +11,22 @@ import { Progress } from '@/components/ui/progress'
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { StaggerContainer, FloatingElement, MagneticElement } from '@/components/ui/floating-elements'
 import { useToast } from '@/components/ui/toast'
-import { calculateTaxResult, validateTaxInputs } from '@/lib/calculations/tax'
-import type { TaxInputs, TaxResult } from '@/types/calculator'
+import type { TaxResult } from '@/types/calculator'
+import { useTaxCalculator } from '@/hooks/useTaxCalculator'
 import { cn } from '@/lib/utils'
 import { Calculator, DollarSign, PieChart, TrendingUp, Download, Share2 } from 'lucide-react'
 
-interface TaxFormData {
-  annualSalary: string
-  taxYear: string
-  allowances: string
-  pensionContribution: string
-  nhisContribution: string
-  lifeInsurance: string
-  calculationType: 'annual' | 'monthly'
-}
-
 export default function EnhancedTaxCalculator() {
   const { addToast } = useToast()
-  
-  const [formData, setFormData] = useState<TaxFormData>({
-    annualSalary: '',
-    taxYear: '2024',
-    allowances: '',
-    pensionContribution: '',
-    nhisContribution: '',
-    lifeInsurance: '',
-    calculationType: 'annual'
-  })
+  const { form, setForm, reset, result, errors, isCalculating, progress, calculate } = useTaxCalculator()
 
-  const [result, setResult] = useState<TaxResult | null>(null)
-  const [errors, setErrors] = useState<string[]>([])
-  const [isCalculating, setIsCalculating] = useState(false)
-  const [calculationProgress, setCalculationProgress] = useState(0)
-  // Real-time calculation with debouncing
-  const calculateTax = useCallback(() => {
-    const annualSalary = parseFloat(formData.annualSalary)
-    const lifeInsurance = parseFloat(formData.lifeInsurance) || 0
+  const handleInputChange = useCallback((field: keyof typeof form, value: string) => {
+    setForm(field, value as any)
+  }, [setForm])
 
-    const inputs: Partial<TaxInputs> = {
-      grossIncome: isNaN(annualSalary) ? undefined : annualSalary,
-      paymentFrequency: formData.calculationType,
-      includeMinimumTax: true,
-      lifeAssurancePremium: lifeInsurance > 0 ? lifeInsurance : undefined,
-      additionalReliefs: {
-        disability: false,
-        oldAge: false,
-        dependentRelatives: 0
-      }
-    }
-
-    const validationErrors = validateTaxInputs(inputs)
-    setErrors(validationErrors)
-
-    if (validationErrors.length === 0 && inputs.grossIncome) {
-      setIsCalculating(true)
-      setCalculationProgress(0)
-
-      // Simulate calculation progress
-      const progressInterval = setInterval(() => {
-        setCalculationProgress(prev => {
-          if (prev >= 100) {
-            clearInterval(progressInterval)
-            return 100
-          }
-          return prev + 25
-        })
-      }, 150)
-
-      setTimeout(() => {
-        try {
-          const newResult = calculateTaxResult(inputs as TaxInputs)
-          setResult(newResult)
-          setIsCalculating(false)
-          setCalculationProgress(0)
-
-          // Show success toast
-          addToast({
-            type: 'success',
-            message: `Tax calculated: ₦${newResult.finalTax.toLocaleString()} total tax`,
-            duration: 3000
-          })
-        } catch (error) {
-          setErrors([error instanceof Error ? error.message : 'Calculation error occurred'])
-          setResult(null)
-          setIsCalculating(false)
-          setCalculationProgress(0)
-        }
-      }, 700)
-    } else {
-      setResult(null)
-    }
-  }, [formData, addToast])
-
-  // Debounced calculation
-  useEffect(() => {
-    const timer = setTimeout(calculateTax, 500)
-    return () => clearTimeout(timer)
-  }, [calculateTax])
-
-  const handleInputChange = (field: keyof TaxFormData, value: string) => {
-    setFormData(prev => ({ ...prev, [field]: value }))
-  }
-
-  const resetForm = () => {
-    setFormData({
-      annualSalary: '',
-      taxYear: '2024',
-      allowances: '',
-      pensionContribution: '',
-      nhisContribution: '',
-      lifeInsurance: '',
-      calculationType: 'annual'
-    })
-    setResult(null)
-    setErrors([])
-  }
+  const resetForm = useCallback(() => {
+    reset()
+  }, [reset])
 
   const handleDownloadReport = () => {
     if (!result) return
@@ -182,7 +83,7 @@ export default function EnhancedTaxCalculator() {
               <div className="space-y-4">
                 <AnimatedInput
                   label="Annual Salary (₦)"
-                  value={formData.annualSalary}
+                  value={form.annualSalary}
                   onChange={(e) => handleInputChange('annualSalary', e.target.value)}
                   placeholder="Enter your annual salary"
                   type="number"
@@ -196,7 +97,7 @@ export default function EnhancedTaxCalculator() {
 
                 <div className="space-y-2">
                   <label className="text-sm font-medium">Tax Year</label>
-                  <Select value={formData.taxYear} onValueChange={(value) => handleInputChange('taxYear', value)}>
+                  <Select value={form.taxYear} onValueChange={(value) => handleInputChange('taxYear', value)}>
                     <SelectTrigger>
                       <SelectValue />
                     </SelectTrigger>
@@ -209,7 +110,7 @@ export default function EnhancedTaxCalculator() {
 
                 <div className="space-y-2">
                   <label className="text-sm font-medium">Calculation Type</label>
-                  <Tabs value={formData.calculationType} onValueChange={(value) => handleInputChange('calculationType', value)}>
+                  <Tabs value={form.calculationType} onValueChange={(value) => handleInputChange('calculationType', value)}>
                     <TabsList className="grid w-full grid-cols-2">
                       <TabsTrigger value="annual" animated>Annual</TabsTrigger>
                       <TabsTrigger value="monthly" animated>Monthly</TabsTrigger>
@@ -229,45 +130,11 @@ export default function EnhancedTaxCalculator() {
             </AnimatedCardHeader>
             <AnimatedCardContent className="space-y-6">
               <div className="space-y-4">
-                <AnimatedInput
-                  label="Additional Allowances (₦)"
-                  value={formData.allowances}
-                  onChange={(e) => handleInputChange('allowances', e.target.value)}
-                  placeholder="Housing, transport, etc."
-                  type="number"
-                  min="0"
-                  step="1000"
-                  floatingLabel
-                  animated
-                />
-
-                <AnimatedInput
-                  label="Pension Contribution (₦)"
-                  value={formData.pensionContribution}
-                  onChange={(e) => handleInputChange('pensionContribution', e.target.value)}
-                  placeholder="Additional pension (8% auto-calculated)"
-                  type="number"
-                  min="0"
-                  step="1000"
-                  floatingLabel
-                  animated
-                />
-
-                <AnimatedInput
-                  label="NHIS Contribution (₦)"
-                  value={formData.nhisContribution}
-                  onChange={(e) => handleInputChange('nhisContribution', e.target.value)}
-                  placeholder="Health insurance contribution"
-                  type="number"
-                  min="0"
-                  step="100"
-                  floatingLabel
-                  animated
-                />
+                {/* Placeholder inputs (previous allowances/pension/nhis) removed since hook does not manage them yet */}
 
                 <AnimatedInput
                   label="Life Insurance (₦)"
-                  value={formData.lifeInsurance}
+                  value={form.lifeInsurance}
                   onChange={(e) => handleInputChange('lifeInsurance', e.target.value)}
                   placeholder="Life insurance premium"
                   type="number"
@@ -282,7 +149,7 @@ export default function EnhancedTaxCalculator() {
         </div>
 
         {/* Calculation Progress */}
-        {isCalculating && (
+  {isCalculating && (
           <AnimatedCard className="max-w-md mx-auto">
             <AnimatedCardContent className="pt-6">
               <motion.div
@@ -291,7 +158,7 @@ export default function EnhancedTaxCalculator() {
                 className="space-y-4 text-center"
               >
                 <div className="text-lg font-semibold">Calculating Tax...</div>
-                <Progress value={calculationProgress} animated showValue />
+                <Progress value={progress} animated showValue />
                 <div className="text-sm text-muted-foreground">
                   Processing Nigerian tax brackets and deductions
                 </div>
@@ -304,7 +171,7 @@ export default function EnhancedTaxCalculator() {
         <div className="flex flex-wrap justify-center gap-4">
           <MagneticElement>
             <Button 
-              onClick={calculateTax} 
+              onClick={() => { calculate(); if(result){ addToast({ type: 'success', message: `Tax calculated: ₦${result.finalTax.toLocaleString()} total tax`, duration: 3000 }) } }} 
               disabled={isCalculating}
               size="lg"
               className="min-w-32"
@@ -348,7 +215,7 @@ export default function EnhancedTaxCalculator() {
                     </div>
                   </FloatingElement>
                   <div className="text-sm text-muted-foreground mt-2">
-                    {formData.calculationType === 'monthly' ? 'Monthly' : 'Annual'} Net Salary
+                    {form.calculationType === 'monthly' ? 'Monthly' : 'Annual'} Net Salary
                   </div>
                 </AnimatedCardContent>
               </AnimatedCard>

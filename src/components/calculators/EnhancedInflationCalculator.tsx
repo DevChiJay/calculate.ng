@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect, useCallback } from 'react'
+import { useCallback } from 'react'
 import { motion } from 'framer-motion'
 import { AnimatedCard, AnimatedCardContent, AnimatedCardHeader, AnimatedCardTitle } from '@/components/ui/animated-card'
 import { AnimatedInput } from '@/components/ui/animated-input'
@@ -10,116 +10,22 @@ import { Progress } from '@/components/ui/progress'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { StaggerContainer, FloatingElement, MagneticElement } from '@/components/ui/floating-elements'
 import { useToast } from '@/components/ui/toast'
-import { calculateInflationResult, validateInflationInputs, type InflationInputs, type InflationResult } from '@/lib/calculations/inflation'
+import { useInflationCalculator } from '@/hooks/useInflationCalculator'
 import { cn } from '@/lib/utils'
 import { TrendingUp, Calendar, DollarSign, BarChart3, AlertTriangle, Info } from 'lucide-react'
 
-interface InflationFormData {
-  initialAmount: string
-  startYear: string
-  endYear: string
-  calculationType: 'amount' | 'purchasing_power'
-}
-
 export default function EnhancedInflationCalculator() {
   const { addToast } = useToast()
-  
-  const [formData, setFormData] = useState<InflationFormData>({
-    initialAmount: '',
-    startYear: '2020',
-    endYear: '2024',
-    calculationType: 'amount'
-  })
+  const { form, setForm, reset, result, errors, isCalculating, progress, calculate, yearOptions } = useInflationCalculator()
 
-  const [result, setResult] = useState<InflationResult | null>(null)
-  const [errors, setErrors] = useState<string[]>([])
-  const [isCalculating, setIsCalculating] = useState(false)
-  const [calculationProgress, setCalculationProgress] = useState(0)
-  // Real-time calculation with debouncing
-  const calculateInflation = useCallback(() => {
-    const initialAmount = parseFloat(formData.initialAmount)
-    const startYear = parseInt(formData.startYear)
-    const endYear = parseInt(formData.endYear)
-    
-    const inputs: Partial<InflationInputs> = {
-      amount: isNaN(initialAmount) ? undefined : initialAmount,
-      startDate: `${formData.startYear}-01`,
-      endDate: `${formData.endYear}-12`,
-      currency: 'NGN'
-    }
+  const handleInputChange = useCallback((field: keyof typeof form, value: string) => {
+    // Hook accepts strongly typed key/value; value is string in UI layer
+    setForm(field, value as never)
+  }, [setForm])
 
-    const validationErrors = validateInflationInputs(inputs)
-    setErrors(validationErrors)
-    
-    if (validationErrors.length === 0 && inputs.amount) {
-      setIsCalculating(true)
-      setCalculationProgress(0)
+  const resetForm = useCallback(() => { reset() }, [reset])
 
-      // Simulate calculation progress
-      const progressInterval = setInterval(() => {
-        setCalculationProgress(prev => {
-          if (prev >= 100) {
-            clearInterval(progressInterval)
-            return 100
-          }
-          return prev + 20
-        })
-      }, 200)
-
-      setTimeout(() => {
-        try {
-          const newResult = calculateInflationResult(inputs as InflationInputs)
-          setResult(newResult)
-          setIsCalculating(false)
-          setCalculationProgress(0)
-            // Show success toast
-          addToast({
-            type: 'success',
-            message: `Inflation calculated: ${newResult.totalInflation.toFixed(1)}% over ${endYear - startYear} years`,
-            duration: 3000
-          })
-        } catch (error) {
-          setErrors([error instanceof Error ? error.message : 'Calculation error occurred'])
-          setResult(null)
-          setIsCalculating(false)
-          setCalculationProgress(0)
-        }
-      }, 1200)
-    } else {
-      setResult(null)
-    }
-  }, [formData, addToast])
-
-  // Debounced calculation
-  useEffect(() => {
-    const timer = setTimeout(calculateInflation, 500)
-    return () => clearTimeout(timer)
-  }, [calculateInflation])
-
-  const handleInputChange = (field: keyof InflationFormData, value: string) => {
-    setFormData(prev => ({ ...prev, [field]: value }))
-  }
-
-  const resetForm = () => {
-    setFormData({
-      initialAmount: '',
-      startYear: '2020',
-      endYear: '2024',
-      calculationType: 'amount'
-    })
-    setResult(null)
-    setErrors([])
-  }
-
-  const getCurrentYear = () => new Date().getFullYear()
-  const getYearOptions = () => {
-    const currentYear = getCurrentYear()
-    const years = []
-    for (let year = 2010; year <= currentYear; year++) {
-      years.push(year.toString())
-    }
-    return years
-  }
+  // yearOptions provided by hook
 
   const getInflationImpactColor = (rate: number) => {
     if (rate < 5) return 'text-green-500'
@@ -181,7 +87,7 @@ export default function EnhancedInflationCalculator() {
               <div className="space-y-4">
                 <AnimatedInput
                   label="Initial Amount (₦)"
-                  value={formData.initialAmount}
+                  value={form.initialAmount}
                   onChange={(e) => handleInputChange('initialAmount', e.target.value)}
                   placeholder="Enter amount in Naira"
                   type="number"
@@ -196,12 +102,12 @@ export default function EnhancedInflationCalculator() {
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <label className="text-sm font-medium">Start Year</label>
-                    <Select value={formData.startYear} onValueChange={(value) => handleInputChange('startYear', value)}>
+                    <Select value={form.startYear} onValueChange={(value) => handleInputChange('startYear', value)}>
                       <SelectTrigger>
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
-                        {getYearOptions().map(year => (
+                        {yearOptions.map(year => (
                           <SelectItem key={year} value={year}>{year}</SelectItem>
                         ))}
                       </SelectContent>
@@ -210,12 +116,12 @@ export default function EnhancedInflationCalculator() {
 
                   <div className="space-y-2">
                     <label className="text-sm font-medium">End Year</label>
-                    <Select value={formData.endYear} onValueChange={(value) => handleInputChange('endYear', value)}>
+                    <Select value={form.endYear} onValueChange={(value) => handleInputChange('endYear', value)}>
                       <SelectTrigger>
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
-                        {getYearOptions().map(year => (
+                        {yearOptions.map(year => (
                           <SelectItem key={year} value={year}>{year}</SelectItem>
                         ))}
                       </SelectContent>
@@ -234,7 +140,7 @@ export default function EnhancedInflationCalculator() {
               </AnimatedCardTitle>
             </AnimatedCardHeader>
             <AnimatedCardContent className="space-y-6">
-              <Tabs value={formData.calculationType} onValueChange={(value) => handleInputChange('calculationType', value)}>
+              <Tabs value={form.calculationType} onValueChange={(value) => handleInputChange('calculationType', value)}>
                 <TabsList className="grid w-full grid-cols-2">
                   <TabsTrigger value="amount" animated>Future Value</TabsTrigger>
                   <TabsTrigger value="purchasing_power" animated>Purchasing Power</TabsTrigger>
@@ -263,7 +169,7 @@ export default function EnhancedInflationCalculator() {
         </div>
 
         {/* Calculation Progress */}
-        {isCalculating && (
+  {isCalculating && (
           <AnimatedCard className="max-w-md mx-auto">
             <AnimatedCardContent className="pt-6">
               <motion.div
@@ -272,9 +178,9 @@ export default function EnhancedInflationCalculator() {
                 className="space-y-4 text-center"
               >
                 <div className="text-lg font-semibold">Analyzing Inflation Data...</div>
-                <Progress value={calculationProgress} animated showValue />
+                <Progress value={progress} animated showValue />
                 <div className="text-sm text-muted-foreground">
-                  Processing CPI data from {formData.startYear} to {formData.endYear}
+                  Processing CPI data from {form.startYear} to {form.endYear}
                 </div>
               </motion.div>
             </AnimatedCardContent>
@@ -285,7 +191,7 @@ export default function EnhancedInflationCalculator() {
         <div className="flex flex-wrap justify-center gap-4">
           <MagneticElement>
             <Button 
-              onClick={calculateInflation} 
+              onClick={() => { calculate(); if(result){ addToast({ type:'success', message:`Inflation calculated: ${result.totalInflation.toFixed(1)}%`, duration: 3000}) } }} 
               disabled={isCalculating}
               size="lg"
               className="min-w-32"
@@ -340,7 +246,7 @@ export default function EnhancedInflationCalculator() {
                     </div>
                   </FloatingElement>
                   <div className="text-sm text-muted-foreground mt-2">
-                    {formData.calculationType === 'amount' ? 'Future Value' : 'Current Value'}
+                    {form.calculationType === 'amount' ? 'Future Value' : 'Current Value'}
                   </div>
                 </AnimatedCardContent>
               </AnimatedCard>              <AnimatedCard className="text-center" glowEffect>
@@ -372,9 +278,9 @@ export default function EnhancedInflationCalculator() {
                         animate={{ opacity: 1, x: 0 }}
                         className="flex justify-between items-center p-3 bg-muted rounded-lg"
                       >
-                        <span className="font-medium">Initial Amount ({formData.startYear})</span>
+                        <span className="font-medium">Initial Amount ({form.startYear})</span>
                         <span className="font-mono text-primary">
-                          ₦{parseFloat(formData.initialAmount).toLocaleString()}
+                          ₦{parseFloat(form.initialAmount).toLocaleString()}
                         </span>
                       </motion.div>
 
@@ -385,7 +291,7 @@ export default function EnhancedInflationCalculator() {
                         className="flex justify-between items-center p-3 bg-muted rounded-lg"
                       >
                         <span className="font-medium">
-                          {formData.calculationType === 'amount' ? `Equivalent Amount (${formData.endYear})` : `Purchasing Power (${formData.endYear})`}
+                          {form.calculationType === 'amount' ? `Equivalent Amount (${form.endYear})` : `Purchasing Power (${form.endYear})`}
                         </span>
                         <span className="font-mono text-green-500">
                           ₦{result.adjustedAmount.toLocaleString()}
