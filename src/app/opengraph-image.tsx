@@ -1,6 +1,6 @@
 import { ImageResponse } from "next/og";
 
-export const alt = "Calculate.ng: Nigerian tax, inflation and BMI calculators";
+export const alt = "Calculate.ng: free Nigerian calculators for tax, loans, savings and more";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -23,7 +23,7 @@ export default function OpengraphImage() {
         <div style={{ display: "flex", fontSize: 34, color: "#22d3c5", letterSpacing: 2 }}>CALCULATE.NG</div>
         <div style={{ display: "flex", flexDirection: "column" }}>
           <div style={{ display: "flex", fontSize: 76, fontWeight: 700, lineHeight: 1.05 }}>
-            Nigerian tax, inflation and BMI calculators
+            Free Nigerian calculators for tax, loans, savings and more
           </div>
           <div style={{ display: "flex", fontSize: 34, color: "#a6b0bd", marginTop: 28 }}>
             2026 PAYE under the Nigeria Tax Act 2025. Clear workings, no sign-up.

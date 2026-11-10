@@ -1,7 +1,7 @@
 export const site = {
   name: "Calculate.ng",
   url: "https://calculate.ng",
-  tagline: "Nigerian tax, inflation and BMI calculators",
+  tagline: "Free Nigerian calculators for tax, loans, savings and more",
   owner: { name: "Devchi Digital", url: "https://devchi.me" },
   contact: { email: "support@devchi.me", phone: "+234 701 165 5197", phoneHref: "+2347011655197" },
   social: {

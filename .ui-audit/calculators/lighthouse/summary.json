@@ -1,0 +1,112 @@
+{
+ "bmi-calculator": {
+  "scores": {
+   "performance": 100,
+   "accessibility": 100,
+   "best-practices": 100,
+   "seo": 100
+  },
+  "lcp": "0.8 s",
+  "tbt": "70 ms",
+  "cls": "0"
+ },
+ "calculators": {
+  "scores": {
+   "performance": 100,
+   "accessibility": 100,
+   "best-practices": 100,
+   "seo": 100
+  },
+  "lcp": "0.8 s",
+  "tbt": "40 ms",
+  "cls": "0"
+ },
+ "cgpa-calculator": {
+  "scores": {
+   "performance": 100,
+   "accessibility": 100,
+   "best-practices": 100,
+   "seo": 100
+  },
+  "lcp": "0.9 s",
+  "tbt": "30 ms",
+  "cls": "0"
+ },
+ "home": {
+  "scores": {
+   "performance": 100,
+   "accessibility": 100,
+   "best-practices": 100,
+   "seo": 100
+  },
+  "lcp": "0.8 s",
+  "tbt": "80 ms",
+  "cls": "0"
+ },
+ "inflation-calculator": {
+  "scores": {
+   "performance": 100,
+   "accessibility": 100,
+   "best-practices": 100,
+   "seo": 100
+  },
+  "lcp": "0.8 s",
+  "tbt": "30 ms",
+  "cls": "0"
+ },
+ "loan-calculator": {
+  "scores": {
+   "performance": 100,
+   "accessibility": 100,
+   "best-practices": 100,
+   "seo": 100
+  },
+  "lcp": "0.8 s",
+  "tbt": "40 ms",
+  "cls": "0"
+ },
+ "net-to-gross-calculator": {
+  "scores": {
+   "performance": 100,
+   "accessibility": 100,
+   "best-practices": 100,
+   "seo": 100
+  },
+  "lcp": "0.8 s",
+  "tbt": "50 ms",
+  "cls": "0"
+ },
+ "savings-calculator": {
+  "scores": {
+   "performance": 100,
+   "accessibility": 100,
+   "best-practices": 100,
+   "seo": 100
+  },
+  "lcp": "0.8 s",
+  "tbt": "30 ms",
+  "cls": "0"
+ },
+ "tax-calculator": {
+  "scores": {
+   "performance": 100,
+   "accessibility": 100,
+   "best-practices": 100,
+   "seo": 100
+  },
+  "lcp": "0.9 s",
+  "tbt": "50 ms",
+  "cls": "0"
+ },
+ "vat-calculator": {
+  "scores": {
+   "performance": 100,
+   "accessibility": 100,
+   "best-practices": 100,
+   "seo": 100
+  },
+  "lcp": "0.8 s",
+  "tbt": "80 ms",
+  "cls": "0"
+ }
+}

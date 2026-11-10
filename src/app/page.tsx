@@ -30,11 +30,11 @@ export default function HomePage() {
       <section aria-labelledby="hero" className="max-w-3xl">
         <Eyebrow className="mb-4">Free · No sign-up</Eyebrow>
         <h1 id="hero" className="text-4xl font-semibold leading-[1.08] sm:text-5xl md:text-6xl">
-          Nigerian tax, inflation and BMI calculators
+          Free Nigerian calculators for tax, loans, savings and more
         </h1>
         <p className="mt-5 text-lg leading-relaxed text-muted-foreground sm:text-xl">
-          Work out your take-home pay under the 2026 tax rules, see what your naira was worth in an earlier year, or check
-          your BMI. Clear answers in seconds, with the workings shown.
+          Work out your take-home pay under the 2026 tax rules, the real cost of a loan, how your savings grow, your CGPA
+          and more. Clear answers in seconds, with the workings shown.
         </p>
         <div className="mt-8 flex flex-wrap gap-3">
           <Link href="/tax-calculator" className={cn(buttonVariants({ size: "lg" }))}>

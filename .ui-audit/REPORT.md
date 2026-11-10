@@ -44,3 +44,35 @@ Lighthouse SEO was already 100 before; it does not detect wrong canonicals, a mi
 5. **Web app icons:** manifest has no icons (the old ones 404'd); the favicon is still a 16×16 PNG. Generate 192/512 icons from the logo.
 6. **Copy for review:** new home/tax/BMI/inflation copy is mine; the footer keeps your email and phone. `NEXT_PUBLIC_GA_ID` defaults to the existing GA property; there is no cookie/consent notice.
 7. **Live site:** unchanged. After deploying, re-check no-JS HTML, canonicals, Rich Results Test, PageSpeed, and resubmit the sitemap.
+
+---
+
+# Addendum: five new calculators (branch `feat/more-calculators`)
+
+Net to gross, CGPA, loan, savings and VAT, plus a grouped navigation so the site did not become cluttered.
+Measured locally on a production build; Lighthouse mobile with simulated throttling on a fast Mac (not a real low-end Android).
+
+| Measure | Result |
+|---|---|
+| Calculators / routes | 8 calculators + `/calculators` hub + home (was 3 + home) |
+| Unit tests | 216 (was 73), all hand-calculated; each engine written test-first |
+| Browser checks (`npm run e2e`) | 239 across 7 suites, both colour schemes, keyboard menu, mobile menu, 375px; all pass |
+| axe violations (10 routes × 375/768/1440 × light/dark) | 0 |
+| Lighthouse mobile, all 10 routes | 100 / 100 / 100 / 100 (performance / accessibility / best practices / SEO); LCP ≤ 0.9 s, CLS 0 |
+| Per-route SEO | one H1, own canonical, `WebApplication` + `BreadcrumbList` + `FAQPage` JSON-LD, listed in `sitemap.xml` |
+
+## How the UI was kept uncluttered
+- **Structure:** three groups (Income & tax, Money, Everyday) defined once in `src/lib/site.ts`; one "Calculators" menu, a hub page, a grouped footer, at most three related links per page.
+- **Budget per calculator:** at most 4 visible inputs (a number and its unit count as one), the rest under "More options"; one result card with at most 2 headline figures; schedules, workings and year tables collapsed; one notice visible; no tabs, charts or modals. Enforced by e2e checks (headline count, collapsed-by-default details, hidden options).
+- Deviation from the plan: the CGPA rows have no course-name field (units and grade only), to keep rows compact.
+
+## Rules confidence (unchanged principle: never present a guess as fact)
+- **Confirmed:** PAYE bands and rent relief; VAT 7.5% standard rate; loan and savings maths (standard formulas, checked against textbook values and independent computations).
+- **Unverified and labelled on the page:** pension/NHF/NHIS/life-insurance deductions; CGPA degree classes (5.0 only; no class for 4.0); which items are zero-rated or exempt for VAT and the small-business threshold (sources disagree, so the calculator does not decide).
+- **Not modelled and stated:** tax and fees on savings interest; input VAT recovery; lender-specific rounding and fees.
+
+## Still open
+1. The inflation page's CPI data is unreliable and **must not be deployed** until replaced (see the main report).
+2. All new page copy is mine and needs the owner's review. The loan "effective annual rate" is defined on the page (monthly IRR compounded) because lenders differ.
+3. Not built (ideas): pension, freelancer tax, JAMB aggregate, live FX. No backend is needed for the current set.
+4. Real-device testing on a low-end Android phone is still outstanding.

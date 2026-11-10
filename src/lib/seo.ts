@@ -4,9 +4,9 @@ import { site } from "@/lib/site";
 /** Per-route SEO copy. Titles ≤ 60 chars, descriptions ≤ 160 chars. `updated` feeds the sitemap. */
 export const pages = {
   "/": {
-    title: "Nigerian Tax, Inflation & BMI Calculators | Calculate.ng",
+    title: "Free Nigerian Tax, Loan & Salary Calculators | Calculate.ng",
     description:
-      "Free Nigerian calculators: 2026 PAYE tax and take-home pay, inflation and the value of the naira, and BMI. Clear workings, no sign-up.",
+      "Free Nigerian calculators: 2026 PAYE and take-home pay, loans, savings, VAT, CGPA, inflation and BMI. Clear workings, no sign-up.",
     updated: "2026-11-10",
   },
   "/calculators": {
@@ -71,7 +71,7 @@ const ogImage = {
   url: "/opengraph-image",
   width: 1200,
   height: 630,
-  alt: "Calculate.ng: Nigerian tax, inflation and BMI calculators",
+  alt: "Calculate.ng: free Nigerian calculators for tax, loans, savings and more",
 };
 
 /** Page metadata with its own canonical, Open Graph and Twitter cards (nothing inherited from "/"). */
