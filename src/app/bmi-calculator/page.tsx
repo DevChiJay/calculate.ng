@@ -1,9 +1,7 @@
 import { BmiCalculator } from "@/components/calculators/bmi-calculator";
-import { ContentSection, DataTable, FaqList, td, th, type FaqItem } from "@/components/content";
-import { JsonLd } from "@/components/json-ld";
-import { PageHeader } from "@/components/page-header";
+import { CalculatorPage } from "@/components/calculator-page";
+import { ContentSection, DataTable, td, th, type FaqItem } from "@/components/content";
 import { BMI_CATEGORIES } from "@/lib/calculations/bmi";
-import { breadcrumbSchema, faqSchema, webApplicationSchema } from "@/lib/schema";
 import { pageMetadata } from "@/lib/seo";
 import { toneText } from "@/lib/tone";
 
@@ -34,18 +32,17 @@ const faq: FaqItem[] = [
 
 export default function BmiCalculatorPage() {
   return (
-    <div className="container-x py-10 sm:py-14">
-      <JsonLd data={webApplicationSchema("/bmi-calculator", "BMI Calculator", "HealthApplication")} />
-      <JsonLd data={breadcrumbSchema("/bmi-calculator", "BMI calculator")} />
-      <JsonLd data={faqSchema(faq)} />
-
-      <PageHeader eyebrow="Health" title="BMI Calculator">
-        Enter your weight and height in kilograms and centimetres, or pounds and feet, to see your body mass index and
-        what range it falls in.
-      </PageHeader>
-
-      <BmiCalculator />
-
+    <CalculatorPage
+      path="/bmi-calculator"
+      appName="BMI Calculator"
+      breadcrumb="BMI calculator"
+      category="HealthApplication"
+      eyebrow="Health"
+      title="BMI Calculator"
+      intro="Enter your weight and height in kilograms and centimetres, or pounds and feet, to see your body mass index and what range it falls in."
+      calculator={<BmiCalculator />}
+      faq={faq}
+    >
       <ContentSection id="how" title="How BMI is calculated">
         <p>
           <strong>BMI = weight (kg) ÷ height (m)²</strong>. The result is rounded to one decimal place, and the category
@@ -78,10 +75,6 @@ export default function BmiCalculatorPage() {
           are worried about your weight, speak to a doctor or dietitian.
         </p>
       </ContentSection>
-
-      <ContentSection id="faq" title="Frequently asked questions">
-        <FaqList items={faq} />
-      </ContentSection>
-    </div>
+    </CalculatorPage>
   );
 }

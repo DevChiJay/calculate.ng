@@ -1,8 +1,6 @@
 import { InflationCalculator } from "@/components/calculators/inflation-calculator";
-import { ContentSection, FaqList, type FaqItem } from "@/components/content";
-import { JsonLd } from "@/components/json-ld";
-import { PageHeader } from "@/components/page-header";
-import { breadcrumbSchema, faqSchema, webApplicationSchema } from "@/lib/schema";
+import { CalculatorPage } from "@/components/calculator-page";
+import { ContentSection, type FaqItem } from "@/components/content";
 import { pageMetadata } from "@/lib/seo";
 
 export const metadata = pageMetadata("/inflation-calculator");
@@ -36,17 +34,17 @@ const faq: FaqItem[] = [
 
 export default function InflationCalculatorPage() {
   return (
-    <div className="container-x py-10 sm:py-14">
-      <JsonLd data={webApplicationSchema("/inflation-calculator", "Nigeria Inflation Calculator", "FinanceApplication")} />
-      <JsonLd data={breadcrumbSchema("/inflation-calculator", "Inflation calculator")} />
-      <JsonLd data={faqSchema(faq)} />
-
-      <PageHeader eyebrow="Prices · CPI" title="Nigeria Inflation Calculator">
-        See how much the value of the naira has changed between two dates, using Consumer Price Index data for Nigeria.
-      </PageHeader>
-
-      <InflationCalculator />
-
+    <CalculatorPage
+      path="/inflation-calculator"
+      appName="Nigeria Inflation Calculator"
+      breadcrumb="Inflation calculator"
+      category="FinanceApplication"
+      eyebrow="Prices · CPI"
+      title="Nigeria Inflation Calculator"
+      intro="See how much the value of the naira has changed between two dates, using Consumer Price Index data for Nigeria."
+      calculator={<InflationCalculator />}
+      faq={faq}
+    >
       <ContentSection id="method" title="How it is calculated">
         <p>
           <strong>Equivalent amount = amount × (end CPI ÷ start CPI)</strong>. The yearly rate is the compound rate that
@@ -58,10 +56,6 @@ export default function InflationCalculatorPage() {
           inflation depends on what you buy, so treat the result as a guide.
         </p>
       </ContentSection>
-
-      <ContentSection id="faq" title="Frequently asked questions">
-        <FaqList items={faq} />
-      </ContentSection>
-    </div>
+    </CalculatorPage>
   );
 }

@@ -13,6 +13,7 @@ import { computeTax, validateTaxInputs } from "@/lib/tax/engine";
 import { RULES } from "@/lib/tax/rules";
 import type { FieldError, Period, TaxInputs } from "@/lib/tax/types";
 import { formatNaira, formatPercent, parseMoney, parseOptionalMoney } from "@/lib/utils/format";
+import { CalculatorGrid, FormPanel, ResultPanel } from "@/components/calculators/shared";
 
 interface FormState {
   period: Period;
@@ -139,13 +140,8 @@ export function TaxCalculator() {
   const fieldToInput = { pension: "pension", nhf: "nhf", nhis: "nhis", life: "lifeInsurance" } as const;
 
   return (
-    <div className="grid gap-6 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)]">
-      <form
-        onSubmit={(e) => e.preventDefault()}
-        noValidate
-        aria-label="Tax inputs"
-        className="space-y-5 rounded-xl border border-border bg-card p-5 sm:p-6"
-      >
+    <CalculatorGrid wide>
+      <FormPanel label="Tax inputs">
         <Segmented
           legend="Enter amounts per"
           name="tax-period"
@@ -231,9 +227,9 @@ export function TaxCalculator() {
             {copied === "fail" && "Could not copy. Copy the address from your browser instead."}
           </span>
         </div>
-      </form>
+      </FormPanel>
 
-      <div aria-live="polite" className="min-w-0 space-y-6 rounded-xl border border-border bg-card p-5 sm:p-6">
+      <ResultPanel className="space-y-6">
         {result ? (
           <>
             <dl className="grid gap-4 sm:grid-cols-2">
@@ -363,8 +359,8 @@ export function TaxCalculator() {
         <Notice>
           An estimate for regular employment income, not tax advice. Your employer’s payroll may differ.
         </Notice>
-      </div>
-    </div>
+      </ResultPanel>
+    </CalculatorGrid>
   );
 }
 

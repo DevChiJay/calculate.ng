@@ -1,9 +1,10 @@
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
+import { CalculatorCard } from "@/components/calculator-card";
 import { Eyebrow } from "@/components/ui/eyebrow";
 import { buttonVariants } from "@/components/ui/button";
 import { pageMetadata } from "@/lib/seo";
-import { calculators } from "@/lib/site";
+import { calculatorGroups } from "@/lib/site";
 import { cn } from "@/lib/utils";
 
 export const metadata = pageMetadata("/");
@@ -39,39 +40,28 @@ export default function HomePage() {
           <Link href="/tax-calculator" className={cn(buttonVariants({ size: "lg" }))}>
             Calculate my PAYE tax <ArrowRight aria-hidden />
           </Link>
+          <Link href="/calculators" className={cn(buttonVariants({ size: "lg", variant: "outline" }))}>
+            All calculators
+          </Link>
         </div>
       </section>
 
-      <section aria-labelledby="calculators" className="mt-16">
-        <h2 id="calculators" className="text-2xl font-semibold sm:text-3xl">
-          Choose a calculator
-        </h2>
-        <ul className="mt-6 grid gap-4 md:grid-cols-3">
-          {calculators.map((c, i) => (
-            <li key={c.path}>
-              <Link
-                href={c.path}
-                className={cn(
-                  "group flex h-full flex-col rounded-xl border bg-card p-6 transition-colors hover:border-primary",
-                  i === 0 ? "border-primary/60" : "border-border",
-                )}
-              >
-                {i === 0 && (
-                  <span className="mb-3 w-fit rounded-full bg-accent px-2.5 py-0.5 text-xs font-semibold text-accent-foreground">
-                    Updated for 2026
-                  </span>
-                )}
-                <h3 className="text-xl font-semibold">{c.name}</h3>
-                <p className="mt-2 flex-1 text-muted-foreground">{c.blurb}</p>
-                <span className="mt-5 inline-flex items-center gap-2 text-sm font-medium text-primary">
-                  Open calculator
-                  <ArrowRight aria-hidden className="size-4 transition-transform group-hover:translate-x-0.5" />
-                </span>
-              </Link>
-            </li>
-          ))}
-        </ul>
-      </section>
+      <div className="mt-16 space-y-10">
+        {calculatorGroups.map((g) => (
+          <section key={g.id} aria-labelledby={`home-${g.id}`}>
+            <h2 id={`home-${g.id}`} className="text-xl font-semibold sm:text-2xl">
+              {g.name}
+            </h2>
+            <ul className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {g.items.map((c) => (
+                <li key={c.path}>
+                  <CalculatorCard item={c} badge={c.path === "/tax-calculator" ? "Updated for 2026" : undefined} />
+                </li>
+              ))}
+            </ul>
+          </section>
+        ))}
+      </div>
 
       <section aria-labelledby="why" className="mt-16">
         <h2 id="why" className="text-2xl font-semibold sm:text-3xl">

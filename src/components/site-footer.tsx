@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Github, Mail, Phone, Twitter } from "lucide-react";
-import { calculators, site } from "@/lib/site";
+import { calculatorGroups, site } from "@/lib/site";
 
 /** Server component: the year is computed at build time, so there is no client JS for it. */
 export function SiteFooter() {
@@ -12,7 +12,7 @@ export function SiteFooter() {
   return (
     <footer className="border-t border-border bg-surface">
       <div className="container-x py-12">
-        <div className="grid gap-10 md:grid-cols-[1.4fr_1fr_1fr]">
+        <div className="grid gap-10 md:grid-cols-[1fr_2fr_1fr]">
           <div>
             <Image src="/logo.svg" width={120} height={40} alt="Calculate.ng" className="h-10 w-auto" />
             <p className="mt-4 max-w-sm text-sm text-muted-foreground">
@@ -22,18 +22,31 @@ export function SiteFooter() {
 
           <nav aria-label="Calculators">
             <h2 className="text-sm font-semibold">Calculators</h2>
-            <ul className="mt-3 space-y-1">
-              {calculators.map((c) => (
-                <li key={c.path}>
-                  <Link
-                    href={c.path}
-                    className="inline-flex min-h-11 items-center text-sm text-muted-foreground underline-offset-4 hover:text-foreground hover:underline"
-                  >
-                    {c.name}
-                  </Link>
-                </li>
+            <div className="mt-3 grid gap-x-8 gap-y-4 sm:grid-cols-3">
+              {calculatorGroups.map((g) => (
+                <div key={g.id}>
+                  <p className="text-xs font-semibold uppercase tracking-[0.12em] text-primary">{g.name}</p>
+                  <ul className="mt-1">
+                    {g.items.map((c) => (
+                      <li key={c.path}>
+                        <Link
+                          href={c.path}
+                          className="inline-flex min-h-11 items-center text-sm text-muted-foreground underline-offset-4 hover:text-foreground hover:underline"
+                        >
+                          {c.name}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
               ))}
-            </ul>
+            </div>
+            <Link
+              href="/calculators"
+              className="mt-1 inline-flex min-h-11 items-center text-sm font-medium text-primary underline-offset-4 hover:underline"
+            >
+              All calculators
+            </Link>
           </nav>
 
           <div>

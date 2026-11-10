@@ -1,9 +1,7 @@
 import { TaxCalculator } from "@/components/calculators/tax-calculator";
-import { ContentSection, DataTable, FaqList, td, th, type FaqItem } from "@/components/content";
-import { JsonLd } from "@/components/json-ld";
-import { PageHeader } from "@/components/page-header";
+import { CalculatorPage } from "@/components/calculator-page";
+import { ContentSection, DataTable, td, th, type FaqItem } from "@/components/content";
 import { Notice, Tag } from "@/components/ui/notice";
-import { breadcrumbSchema, faqSchema, webApplicationSchema } from "@/lib/schema";
 import { pageMetadata } from "@/lib/seo";
 import { computeTax } from "@/lib/tax/engine";
 import { RULES } from "@/lib/tax/rules";
@@ -75,18 +73,17 @@ const faq: FaqItem[] = [
 
 export default function TaxCalculatorPage() {
   return (
-    <div className="container-x py-10 sm:py-14">
-      <JsonLd data={webApplicationSchema("/tax-calculator", "Nigeria PAYE Tax Calculator", "FinanceApplication")} />
-      <JsonLd data={breadcrumbSchema("/tax-calculator", "Income tax calculator")} />
-      <JsonLd data={faqSchema(faq)} />
-
-      <PageHeader eyebrow="Income tax · PAYE" title="Nigeria PAYE Tax Calculator 2026">
-        Work out your PAYE tax and take-home pay under the Nigeria Tax Act 2025, by the month or by the year, and see how
-        it compares with the old rules.
-      </PageHeader>
-
-      <p className="-mt-4 mb-8 text-sm text-muted-foreground">
-        Rules effective {formatIsoDate(rules.effectiveFrom)} · last checked {formatIsoDate(rules.lastChecked)} · Sources:{" "}
+    <CalculatorPage
+      path="/tax-calculator"
+      appName="Nigeria PAYE Tax Calculator"
+      breadcrumb="Income tax calculator"
+      category="FinanceApplication"
+      eyebrow="Income tax · PAYE"
+      title="Nigeria PAYE Tax Calculator 2026"
+      intro="Work out your PAYE tax and take-home pay under the Nigeria Tax Act 2025, by the month or by the year, and see how it compares with the old rules."
+      status={
+        <>
+          Rules effective {formatIsoDate(rules.effectiveFrom)} · last checked {formatIsoDate(rules.lastChecked)} · Sources:{" "}
         {rules.sources.map((s, i) => (
           <span key={s.url}>
             {i > 0 && ", "}
@@ -95,10 +92,11 @@ export default function TaxCalculatorPage() {
             </a>
           </span>
         ))}
-      </p>
-
-      <TaxCalculator />
-
+        </>
+      }
+      calculator={<TaxCalculator />}
+      faq={faq}
+    >
       <ContentSection id="bands" title="2026 income tax bands">
         <p>
           Tax is charged on <strong>taxable income</strong>, which is your gross income less the reliefs you qualify for.
@@ -190,10 +188,6 @@ export default function TaxCalculatorPage() {
           giving {formatNaira(exampleA.annual.tax)}.
         </p>
       </ContentSection>
-
-      <ContentSection id="faq" title="Frequently asked questions">
-        <FaqList items={faq} />
-      </ContentSection>
-    </div>
+    </CalculatorPage>
   );
 }

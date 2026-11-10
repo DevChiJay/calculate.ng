@@ -9,6 +9,12 @@ export const pages = {
       "Free Nigerian calculators: 2026 PAYE tax and take-home pay, inflation and the value of the naira, and BMI. Clear workings, no sign-up.",
     updated: "2026-11-10",
   },
+  "/calculators": {
+    title: "Nigerian Calculators: Tax, Loan, CGPA, VAT | Calculate.ng",
+    description:
+      "Browse free Nigerian calculators for PAYE tax, net salary, VAT, loans, savings, inflation, CGPA and BMI. Clear workings, no sign-up.",
+    updated: "2026-11-10",
+  },
   "/tax-calculator": {
     title: "Nigeria PAYE Tax Calculator 2026 (NTA 2025) | Calculate.ng",
     description:

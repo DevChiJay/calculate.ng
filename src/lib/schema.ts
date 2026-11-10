@@ -1,4 +1,4 @@
-import { site } from "@/lib/site";
+import { site, type CalculatorGroup } from "@/lib/site";
 import { pages, type PagePath } from "@/lib/seo";
 
 const publisher = {
@@ -6,6 +6,9 @@ const publisher = {
   name: site.owner.name,
   url: site.owner.url,
 };
+
+/** Paths that are individual calculators (everything except the home page and the hub). */
+export type CalculatorPath = Exclude<PagePath, "/" | "/calculators">;
 
 export const websiteSchema = {
   "@context": "https://schema.org",
@@ -17,9 +20,9 @@ export const websiteSchema = {
 };
 
 export function webApplicationSchema(
-  path: Exclude<PagePath, "/">,
+  path: CalculatorPath,
   name: string,
-  category: "FinanceApplication" | "HealthApplication",
+  category: "FinanceApplication" | "HealthApplication" | "EducationalApplication",
 ) {
   return {
     "@context": "https://schema.org",
@@ -58,5 +61,27 @@ export function faqSchema(items: { question: string; answer: string }[]) {
       name: i.question,
       acceptedAnswer: { "@type": "Answer", text: i.answer },
     })),
+  };
+}
+
+/** The hub page: a CollectionPage whose main entity is the list of every calculator. */
+export function collectionSchema(groups: readonly CalculatorGroup[]) {
+  const items = groups.flatMap((g) => g.items);
+  return {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    name: "Nigerian calculators",
+    url: `${site.url}/calculators`,
+    description: pages["/calculators"].description,
+    inLanguage: "en-NG",
+    mainEntity: {
+      "@type": "ItemList",
+      itemListElement: items.map((c, i) => ({
+        "@type": "ListItem",
+        position: i + 1,
+        name: c.name,
+        url: `${site.url}${c.path}`,
+      })),
+    },
   };
 }

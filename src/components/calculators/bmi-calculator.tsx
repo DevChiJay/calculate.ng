@@ -8,6 +8,7 @@ import { Notice } from "@/components/ui/notice";
 import { BMI_CATEGORIES, calculateBMI, validateBMIInputs, type BMIFieldError, type Unit } from "@/lib/calculations/bmi";
 import { parseMoney } from "@/lib/utils/format";
 import { toneBg, toneText } from "@/lib/tone";
+import { CalculatorGrid, FormPanel, ResultPanel } from "@/components/calculators/shared";
 
 interface FormState {
   unit: Unit;
@@ -48,13 +49,8 @@ export function BmiCalculator() {
   const { result } = outcome;
 
   return (
-    <div className="grid gap-6 lg:grid-cols-[minmax(0,5fr)_minmax(0,6fr)]">
-      <form
-        onSubmit={(e) => e.preventDefault()}
-        noValidate
-        className="space-y-5 rounded-xl border border-border bg-card p-5 sm:p-6"
-        aria-label="BMI inputs"
-      >
+    <CalculatorGrid>
+      <FormPanel label="BMI inputs">
         <Segmented
           legend="Units"
           name="bmi-unit"
@@ -120,9 +116,9 @@ export function BmiCalculator() {
         <Button type="button" variant="outline" onClick={() => setForm({ ...EMPTY, unit: form.unit })}>
           Clear
         </Button>
-      </form>
+      </FormPanel>
 
-      <div aria-live="polite" className="rounded-xl border border-border bg-card p-5 sm:p-6">
+      <ResultPanel>
         {result ? (
           <div className="space-y-6">
             <div>
@@ -191,7 +187,7 @@ export function BmiCalculator() {
           BMI is a screening measure for adults aged 18 and over. It does not tell muscle from fat, and does not apply to
           children, pregnancy or athletes. It is not medical advice.
         </Notice>
-      </div>
-    </div>
+      </ResultPanel>
+    </CalculatorGrid>
   );
 }

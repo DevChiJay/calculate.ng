@@ -11,6 +11,7 @@ import {
 } from "@/lib/calculations/inflation";
 import { getAvailableDateRange, getCPIForMonth } from "@/lib/data/nigeria-cpi";
 import { formatMonthYear, formatNaira, formatPercent, parseMoney } from "@/lib/utils/format";
+import { CalculatorGrid, FormPanel, ResultPanel } from "@/components/calculators/shared";
 
 const range = getAvailableDateRange();
 const minYear = Number(range.min.slice(0, 4));
@@ -71,13 +72,8 @@ export function InflationCalculator() {
   ));
 
   return (
-    <div className="grid gap-6 lg:grid-cols-[minmax(0,5fr)_minmax(0,6fr)]">
-      <form
-        onSubmit={(e) => e.preventDefault()}
-        noValidate
-        aria-label="Inflation inputs"
-        className="space-y-5 rounded-xl border border-border bg-card p-5 sm:p-6"
-      >
+    <CalculatorGrid>
+      <FormPanel label="Inflation inputs">
         <TextField
           id="infl-amount"
           label="Amount (₦)"
@@ -118,9 +114,9 @@ export function InflationCalculator() {
         <Button type="button" variant="outline" onClick={() => setForm(defaults())}>
           Reset
         </Button>
-      </form>
+      </FormPanel>
 
-      <div aria-live="polite" className="space-y-6 rounded-xl border border-border bg-card p-5 sm:p-6">
+      <ResultPanel className="space-y-6">
         {result && !amountBlank ? (
           <>
             <div className="rounded-lg bg-accent p-4 text-accent-foreground">
@@ -157,8 +153,8 @@ export function InflationCalculator() {
           Data coverage: {formatMonthYear(range.min)} to {formatMonthYear(range.max)}. We are updating the series to the
           latest NBS releases, including the 2025 rebasing of the CPI.
         </Notice>
-      </div>
-    </div>
+      </ResultPanel>
+    </CalculatorGrid>
   );
 }
 
