@@ -27,6 +27,12 @@ export const pages = {
       "Find the gross salary you need for a target take-home pay under Nigeria's 2026 PAYE rules. Monthly and yearly, with rent relief and the workings shown.",
     updated: "2026-11-10",
   },
+  "/loan-calculator": {
+    title: "Nigeria Loan Calculator: Flat vs Reducing | Calculate.ng",
+    description:
+      "Work out monthly repayments, total interest and the true annual cost of a loan, with flat or reducing-balance interest and fees. See the full schedule.",
+    updated: "2026-11-10",
+  },
   "/inflation-calculator": {
     title: "Nigeria Inflation Calculator (CPI) | Calculate.ng",
     description:

@@ -58,6 +58,13 @@ export const calculatorGroups: readonly CalculatorGroup[] = [
     blurb: "Loans, savings and the value of the naira",
     items: [
       {
+        path: "/loan-calculator",
+        name: "Loan",
+        short: "Loan",
+        blurb: "Work out repayments and the true cost of a loan, flat or reducing balance.",
+        related: ["/inflation-calculator"],
+      },
+      {
         path: "/inflation-calculator",
         name: "Inflation",
         short: "Inflation",
