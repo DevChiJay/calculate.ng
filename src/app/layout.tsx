@@ -4,14 +4,23 @@ import "./globals.css";
 import { Providers } from "@/components/providers";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
-import { GoogleAnalytics } from "@/components/google-analytics";
 import { JsonLd } from "@/components/json-ld";
 import { websiteSchema } from "@/lib/schema";
 import { pages } from "@/lib/seo";
 import { site } from "@/lib/site";
 
-const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"], weight: ["400", "500", "600"], display: "swap" });
-const display = Space_Grotesk({ variable: "--font-space", subsets: ["latin"], weight: ["500", "600"], display: "swap" });
+const geistSans = Geist({
+  variable: "--font-geist-sans",
+  subsets: ["latin"],
+  weight: ["400", "500", "600"],
+  display: "swap",
+});
+const display = Space_Grotesk({
+  variable: "--font-space",
+  subsets: ["latin"],
+  weight: ["500", "600"],
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
@@ -34,12 +43,23 @@ export const viewport: Viewport = {
   ],
 };
 
-export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+export default function RootLayout({
+  children,
+}: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en-NG" suppressHydrationWarning>
+      <head>
+        {/* Umami analytics (production only, so dev and test runs do not count as visits). */}
+        {process.env.NODE_ENV === "production" && (
+          <script
+            defer
+            src="https://umami.devchi.me/script.js"
+            data-website-id="29903701-1888-492c-aa83-d09fa46af5c0"
+          />
+        )}
+      </head>
       <body className={`${geistSans.variable} ${display.variable} antialiased`}>
         <JsonLd data={websiteSchema} />
-        {process.env.NODE_ENV === "production" && <GoogleAnalytics />}
         <Providers>
           <a
             href="#main"
