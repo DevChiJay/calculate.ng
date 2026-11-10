@@ -2,10 +2,11 @@
  * Pre-deployment sanity checks. Run before deploying: `npm run pre-deploy`.
  * Exits non-zero when a required file or setting is missing.
  */
-const fs = require("fs");
-const path = require("path");
+import fs from "node:fs";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 
-const root = path.resolve(__dirname, "..");
+const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const exists = (p) => fs.existsSync(path.join(root, p));
 let failed = false;
 const check = (ok, ok_msg, bad_msg) => {

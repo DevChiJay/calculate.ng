@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useState, useSyncExternalStore } from "react";
 import { Check, Link2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { TextField } from "@/components/ui/field";
@@ -66,26 +66,27 @@ function writeParams(form: FormState): string {
 
 const rules = RULES["2026"];
 
-export function TaxCalculator() {
-  const [form, setForm] = useState<FormState>(EMPTY);
-  const [copied, setCopied] = useState<"idle" | "ok" | "fail">("idle");
-  const hydrated = useRef(false);
-  const set = <K extends keyof FormState>(key: K, value: FormState[K]) => setForm((f) => ({ ...f, [key]: value }));
+const subscribeNoop = () => () => {};
 
-  // Restore a shared link once, after mount (the page itself is static).
-  useEffect(() => {
-    setForm(readParams(window.location.search));
-    hydrated.current = true;
-  }, []);
+export function TaxCalculator() {
+  // The page is static, so a shared link is read on the client. useSyncExternalStore gives "" during
+  // hydration and the real query string right after, with no mismatch and no effect-driven setState.
+  const search = useSyncExternalStore(subscribeNoop, () => window.location.search, () => "");
+  const fromUrl = useMemo(() => readParams(search), [search]);
+  const [edited, setEdited] = useState<FormState | null>(null);
+  const form = edited ?? fromUrl;
+  const [copied, setCopied] = useState<"idle" | "ok" | "fail">("idle");
+  const set = <K extends keyof FormState>(key: K, value: FormState[K]) =>
+    setEdited((prev) => ({ ...(prev ?? fromUrl), [key]: value }));
 
   // Keep the address bar in sync so the current URL is always a shareable link.
   useEffect(() => {
-    if (!hydrated.current) return;
+    if (!edited) return;
     const t = setTimeout(() => {
-      window.history.replaceState(null, "", `${window.location.pathname}${writeParams(form)}`);
+      window.history.replaceState(null, "", `${window.location.pathname}${writeParams(edited)}`);
     }, 300);
     return () => clearTimeout(t);
-  }, [form]);
+  }, [edited]);
 
   const parsed: TaxInputs = useMemo(
     () => ({
@@ -218,7 +219,7 @@ export function TaxCalculator() {
         </details>
 
         <div className="flex flex-wrap items-center gap-3">
-          <Button type="button" variant="outline" onClick={() => setForm({ ...EMPTY, period: form.period })}>
+          <Button type="button" variant="outline" onClick={() => setEdited({ ...EMPTY, period: form.period })}>
             Clear
           </Button>
           <Button type="button" variant="ghost" onClick={copyLink} disabled={!result}>

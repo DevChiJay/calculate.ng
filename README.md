@@ -2,7 +2,7 @@
 
 Free Nigerian calculators: 2026 PAYE income tax (Nigeria Tax Act 2025), inflation (CPI), and BMI. Built by [Devchi Digital](https://devchi.me).
 
-Next.js 15 (App Router), React 19, Tailwind CSS v4. Calculations run in the browser; nothing a user types is stored or sent.
+Next.js 16 (App Router), React 19, Tailwind CSS v4. Calculations run in the browser; nothing a user types is stored or sent.
 
 ## Develop
 
