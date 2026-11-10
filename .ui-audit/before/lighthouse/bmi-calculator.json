@@ -1,0 +1,34 @@
+{
+ "url": "http://localhost:3100/bmi-calculator",
+ "scores": {
+  "performance": 99,
+  "accessibility": 95,
+  "best-practices": 100,
+  "seo": 100
+ },
+ "metrics": {
+  "first-contentful-paint": "1.7\u00a0s",
+  "largest-contentful-paint": "1.7\u00a0s",
+  "total-blocking-time": "40\u00a0ms",
+  "cumulative-layout-shift": "0",
+  "speed-index": "1.7\u00a0s"
+ },
+ "failed": [
+  {
+   "id": "interactive",
+   "title": "Time to Interactive"
+  },
+  {
+   "id": "color-contrast",
+   "title": "Background and foreground colors do not have a sufficient contrast ratio."
+  },
+  {
+   "id": "heading-order",
+   "title": "Heading elements are not in a sequentially-descending order"
+  },
+  {
+   "id": "network-dependency-tree-insight",
+   "title": "Network dependency tree"
+  }
+ ]
+}
