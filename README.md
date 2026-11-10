@@ -1,59 +1,37 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Calculate.ng
 
-## Getting Started
+Free Nigerian calculators: 2026 PAYE income tax (Nigeria Tax Act 2025), inflation (CPI), and BMI. Built by [Devchi Digital](https://devchi.me).
 
-First, run the development server:
+Next.js 15 (App Router), React 19, Tailwind CSS v4. Calculations run in the browser; nothing a user types is stored or sent.
+
+## Develop
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+npm run dev        # http://localhost:3000
+npm test           # unit tests (tax engine, BMI, inflation maths)
+npm run typecheck
+npm run lint
+npm run build
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Before deploying: `npm run pre-deploy`.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Where things are
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- `src/app/*-calculator/page.tsx`: server pages with all copy, metadata and structured data
+- `src/components/calculators/`: the interactive client components
+- `src/lib/tax/`: versioned tax rules (`rules/`) and the pure engine
+- `src/lib/seo.ts`: per-page SEO copy; drives metadata, the sitemap and the pre-deploy check
 
-## Learn More
+See `CLAUDE.md` for architecture notes and `.ui-audit/REPORT.md` for the audit and redesign report.
 
-To learn more about Next.js, take a look at the following resources:
+## Data sources and accuracy
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- **Income tax:** Nigeria Tax Act 2025, in force from 1 January 2026. Bands and rent relief are cross-checked against several published commentaries; pension, NHF, NHIS and life-insurance deductions are user-entered and marked "unverified" until confirmed against the Act's text. Rules and the date they were last checked are shown on the page and in `src/lib/tax/rules/`.
+- **Inflation:** National Bureau of Statistics (NBS) Consumer Price Index. The bundled dataset is being replaced with current NBS figures.
+- **BMI:** World Health Organization adult categories.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Disclaimer
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
-
-## Data Sources & References
-
-This project’s financial calculators leverage reputable Nigerian regulatory and statistical sources. Always verify figures against the latest official releases before production use.
-
-### Tax (Personal Income / PAYE)
-- Federal Inland Revenue Service (FIRS) – Personal Income Tax Act (PITA) and Finance Act amendments.
-- Official publications and circulars for current tax brackets, relief allowances, and minimum tax provisions.
-- Core references: Finance Act 2024 updates to brackets & relief computations.
-
-### Consumer Price Index (CPI) / Inflation
-- National Bureau of Statistics (NBS) – Monthly CPI Bulletins and Annual Statistical Reports.
-- CPI base and methodology derived from NBS releases (composite all-items index).
-- Data access layer includes a fallback static dataset (see `src/lib/data/nigeria-cpi.ts`) and an abstraction for future API integration (`src/lib/data/cpi-source.ts`).
-
-### Pension (Contributory Pension Scheme)
-- National Pension Commission (PenCom) – Guidelines on the Contributory Pension Scheme (CPS).
-- Statutory contribution rates and pensionable earnings definitions (employee / employer splits) from PenCom regulatory circulars.
-- Future calculator scaffold located in `src/components/calculators/PensionCalculator.tsx` (placeholder pending full implementation).
-
-### Disclaimer
-The calculators are for informational and educational purposes only and should not be considered financial, tax, or legal advice. Consult qualified professionals for definitive guidance.
-
+For information only. Not tax, financial or medical advice. Check figures against official sources before relying on them.

@@ -1,233 +1,221 @@
 /**
- * BMI calculation utilities for the BMI Calculator
- * Supports both metric and imperial units with proper validation
+ * BMI (body mass index) for adults, using WHO cut-offs. Pure functions, no UI concerns.
+ * BMI is a screening measure only: it does not distinguish muscle from fat and is not valid for
+ * children, pregnancy, or elite athletes.
  */
 
+export type Unit = "metric" | "imperial";
+
+/** Blank fields are NaN. Metric uses `height` (cm); imperial uses `heightFeet` and `heightInches`. */
 export interface BMIInputs {
+  unit: Unit;
+  /** kg (metric) or lb (imperial). */
   weight: number;
   height: number;
-  unit: 'metric' | 'imperial';
-  heightFeet?: number;
-  heightInches?: number;
+  heightFeet: number;
+  heightInches: number;
+}
+
+export type BMICategoryId = "underweight" | "normal" | "overweight" | "obese1" | "obese2" | "obese3";
+
+export interface BMICategory {
+  id: BMICategoryId;
+  label: string;
+  /** Inclusive lower bound of the range (on the 1-decimal BMI). */
+  min: number;
+  /** Exclusive upper bound; null for the top category. */
+  max: number | null;
+  tone: "info" | "success" | "warning" | "highlight" | "destructive";
+  risk: string;
+  advice: string[];
+}
+
+export const BMI_CATEGORIES: BMICategory[] = [
+  {
+    id: "underweight",
+    label: "Underweight",
+    min: 0,
+    max: 18.5,
+    tone: "info",
+    risk: "A low BMI can go with poor nutrition, an eating disorder, or an underlying health condition.",
+    advice: [
+      "Speak to a healthcare provider about a healthy way to gain weight.",
+      "Focus on regular meals with enough protein and energy.",
+      "Ask whether any underlying condition could be involved.",
+    ],
+  },
+  {
+    id: "normal",
+    label: "Healthy weight",
+    min: 18.5,
+    max: 25,
+    tone: "success",
+    risk: "This range is linked with the lowest risk of heart disease and type 2 diabetes.",
+    advice: [
+      "Keep up regular physical activity, about 150 minutes a week.",
+      "Keep eating a varied, balanced diet.",
+      "Have routine health check-ups.",
+    ],
+  },
+  {
+    id: "overweight",
+    label: "Overweight",
+    min: 25,
+    max: 30,
+    tone: "warning",
+    risk: "A higher BMI raises the risk of heart disease and type 2 diabetes.",
+    advice: [
+      "Small, steady changes in food and activity work better than crash diets.",
+      "Aim to be active most days of the week.",
+      "A nutritionist or doctor can help you set a realistic target.",
+    ],
+  },
+  {
+    id: "obese1",
+    label: "Obese (class 1)",
+    min: 30,
+    max: 35,
+    tone: "highlight",
+    risk: "A moderately raised risk of heart disease, type 2 diabetes and high blood pressure.",
+    advice: [
+      "Ask a healthcare provider for a personal weight-management plan.",
+      "Losing even 5 to 10% of your weight can improve health markers.",
+      "Have blood pressure, cholesterol and blood sugar checked regularly.",
+    ],
+  },
+  {
+    id: "obese2",
+    label: "Obese (class 2)",
+    min: 35,
+    max: 40,
+    tone: "destructive",
+    risk: "A high risk of heart disease, type 2 diabetes, sleep apnoea and other conditions.",
+    advice: [
+      "Seek medical supervision for weight management.",
+      "Ask about structured programmes and screening for related conditions.",
+      "Have cardiovascular risk factors monitored.",
+    ],
+  },
+  {
+    id: "obese3",
+    label: "Obese (class 3)",
+    min: 40,
+    max: null,
+    tone: "destructive",
+    risk: "A very high risk of serious health conditions.",
+    advice: [
+      "See a healthcare provider soon to discuss a management plan.",
+      "Ask about medically supervised programmes and other treatment options.",
+      "Have related conditions assessed and managed together.",
+    ],
+  },
+];
+
+/** Category for a BMI that has already been rounded to 1 decimal (the value the user sees). */
+export function categoryForBMI(bmi: number): BMICategory {
+  return (
+    BMI_CATEGORIES.find((c) => bmi >= c.min && (c.max === null || bmi < c.max)) ??
+    BMI_CATEGORIES[BMI_CATEGORIES.length - 1]
+  );
+}
+
+const LB_TO_KG = 0.45359237;
+const IN_TO_CM = 2.54;
+
+// Adult plausibility limits. Outside these the result would be meaningless or a typo.
+const LIMITS = { weightKg: [20, 500], heightCm: [100, 250] } as const;
+
+function inchesOrZero(inputs: BMIInputs) {
+  return Number.isNaN(inputs.heightInches) ? 0 : inputs.heightInches;
+}
+
+export function toMetric(inputs: BMIInputs): { weightKg: number; heightCm: number } {
+  if (inputs.unit === "imperial") {
+    return {
+      weightKg: inputs.weight * LB_TO_KG,
+      heightCm: (inputs.heightFeet * 12 + inchesOrZero(inputs)) * IN_TO_CM,
+    };
+  }
+  return { weightKg: inputs.weight, heightCm: inputs.height };
+}
+
+export interface BMIFieldError {
+  field: "weight" | "height" | "heightFeet" | "heightInches";
+  message: string;
+}
+export type BMIValidation = { ok: true } | { ok: false; errors: BMIFieldError[] };
+
+export function validateBMIInputs(inputs: BMIInputs): BMIValidation {
+  const errors: BMIFieldError[] = [];
+  const imperial = inputs.unit === "imperial";
+  const weightUnit = imperial ? "lb" : "kg";
+  const [minKg, maxKg] = LIMITS.weightKg;
+  const [minCm, maxCm] = LIMITS.heightCm;
+  const lb = (kg: number) => Math.round(kg / LB_TO_KG);
+
+  if (!Number.isFinite(inputs.weight)) {
+    errors.push({ field: "weight", message: `Enter your weight in ${weightUnit}.` });
+  } else {
+    const kg = imperial ? inputs.weight * LB_TO_KG : inputs.weight;
+    if (kg < minKg || kg > maxKg) {
+      errors.push({
+        field: "weight",
+        message: imperial
+          ? `Enter a weight between ${lb(minKg)} and ${lb(maxKg)} lb.`
+          : `Enter a weight between ${minKg} and ${maxKg} kg.`,
+      });
+    }
+  }
+
+  if (imperial) {
+    if (!Number.isFinite(inputs.heightFeet)) {
+      errors.push({ field: "heightFeet", message: "Enter your height in feet." });
+    } else if (inputs.heightFeet < 0) {
+      errors.push({ field: "heightFeet", message: "Feet cannot be negative." });
+    }
+    if (!Number.isNaN(inputs.heightInches) && (inputs.heightInches < 0 || inputs.heightInches >= 12)) {
+      errors.push({ field: "heightInches", message: "Inches must be from 0 to 11." });
+    }
+    const alreadyFlagged = errors.some((e) => e.field === "heightFeet" || e.field === "heightInches");
+    if (!alreadyFlagged) {
+      const cm = (inputs.heightFeet * 12 + inchesOrZero(inputs)) * IN_TO_CM;
+      if (cm < minCm || cm > maxCm) {
+        errors.push({ field: "heightFeet", message: "Enter a height between 3 ft 4 in and 8 ft 2 in." });
+      }
+    }
+  } else if (!Number.isFinite(inputs.height)) {
+    errors.push({ field: "height", message: "Enter your height in cm." });
+  } else if (inputs.height < minCm || inputs.height > maxCm) {
+    errors.push({ field: "height", message: `Enter a height between ${minCm} and ${maxCm} cm.` });
+  }
+
+  return errors.length === 0 ? { ok: true } : { ok: false, errors };
 }
 
 export interface BMIResult {
+  /** Rounded to 1 decimal: the number shown and used for the category. */
   bmi: number;
   category: BMICategory;
-  categoryColor: string;
-  healthRisk: string;
-  recommendations: string[];
+  weightKg: number;
+  heightCm: number;
+  /** Weights that give a BMI of 18.5 to 24.9 at this height, in kg. */
+  healthyRangeKg: { min: number; max: number };
 }
 
-export type BMICategory = 
-  | 'Underweight' 
-  | 'Normal weight' 
-  | 'Overweight' 
-  | 'Obese Class I' 
-  | 'Obese Class II' 
-  | 'Obese Class III';
-
-/**
- * Convert imperial units to metric
- */
-export function convertImperialToMetric(weightLbs: number, heightFeet: number, heightInches: number) {
-  const weightKg = weightLbs * 0.453592;
-  const heightCm = (heightFeet * 12 + heightInches) * 2.54;
-  return { weightKg, heightCm };
-}
-
-/**
- * Calculate BMI from weight (kg) and height (cm)
- */
-export function calculateBMI(weightKg: number, heightCm: number): number {
-  if (weightKg <= 0 || heightCm <= 0) {
-    throw new Error('Weight and height must be positive numbers');
-  }
-  
+/** Call `validateBMIInputs` first; this assumes finite, in-range inputs. */
+export function calculateBMI(inputs: BMIInputs): BMIResult {
+  const { weightKg, heightCm } = toMetric(inputs);
   const heightM = heightCm / 100;
-  return weightKg / (heightM * heightM);
-}
-
-/**
- * Get BMI category based on BMI value
- */
-export function getBMICategory(bmi: number): BMICategory {
-  if (bmi < 18.5) return 'Underweight';
-  if (bmi < 25) return 'Normal weight';
-  if (bmi < 30) return 'Overweight';
-  if (bmi < 35) return 'Obese Class I';
-  if (bmi < 40) return 'Obese Class II';
-  return 'Obese Class III';
-}
-
-/**
- * Get category color for UI display
- */
-export function getCategoryColor(category: BMICategory): string {
-  switch (category) {
-    case 'Underweight':
-      return 'text-blue-600 bg-blue-50 border-blue-200';
-    case 'Normal weight':
-      return 'text-green-600 bg-green-50 border-green-200';
-    case 'Overweight':
-      return 'text-yellow-600 bg-yellow-50 border-yellow-200';
-    case 'Obese Class I':
-      return 'text-orange-600 bg-orange-50 border-orange-200';
-    case 'Obese Class II':
-      return 'text-red-600 bg-red-50 border-red-200';
-    case 'Obese Class III':
-      return 'text-red-800 bg-red-100 border-red-300';
-    default:
-      return 'text-gray-600 bg-gray-50 border-gray-200';
-  }
-}
-
-/**
- * Get health risk description
- */
-export function getHealthRisk(category: BMICategory): string {
-  switch (category) {
-    case 'Underweight':
-      return 'May indicate malnutrition, eating disorder, or other health issues';
-    case 'Normal weight':
-      return 'Associated with lowest risk of heart disease and diabetes';
-    case 'Overweight':
-      return 'Increased risk of cardiovascular disease and diabetes';
-    case 'Obese Class I':
-      return 'Moderate risk of cardiovascular disease, diabetes, and other health issues';
-    case 'Obese Class II':
-      return 'High risk of cardiovascular disease, diabetes, and other health issues';
-    case 'Obese Class III':
-      return 'Very high risk of cardiovascular disease, diabetes, and other serious health issues';
-    default:
-      return '';
-  }
-}
-
-/**
- * Get health recommendations based on BMI category
- */
-export function getHealthRecommendations(category: BMICategory): string[] {
-  switch (category) {
-    case 'Underweight':
-      return [
-        'Consult with a healthcare provider about healthy weight gain',
-        'Focus on nutrient-dense foods and regular meals',
-        'Consider strength training to build muscle mass',
-        'Monitor for underlying health conditions'
-      ];
-    case 'Normal weight':
-      return [
-        'Maintain current healthy lifestyle habits',
-        'Continue regular physical activity (150+ minutes/week)',
-        'Follow a balanced, nutritious diet',
-        'Regular health check-ups for preventive care'
-      ];
-    case 'Overweight':
-      return [
-        'Aim for gradual weight loss of 1-2 pounds per week',
-        'Increase physical activity to 250+ minutes per week',
-        'Focus on portion control and balanced nutrition',
-        'Consider consulting a nutritionist or healthcare provider'
-      ];
-    case 'Obese Class I':
-      return [
-        'Consult healthcare provider for personalized weight loss plan',
-        'Target 5-10% weight loss as initial goal',
-        'Combine regular exercise with dietary changes',
-        'Monitor blood pressure, cholesterol, and blood sugar regularly'
-      ];
-    case 'Obese Class II':
-      return [
-        'Seek medical supervision for weight management',
-        'Consider structured weight loss programs',
-        'Regular monitoring of cardiovascular risk factors',
-        'Evaluate for sleep apnea and other obesity-related conditions'
-      ];
-    case 'Obese Class III':
-      return [
-        'Immediate medical consultation recommended',
-        'Consider medically supervised weight loss programs',
-        'Evaluate for bariatric surgery if appropriate',
-        'Comprehensive management of obesity-related health conditions'
-      ];
-    default:
-      return [];
-  }
-}
-
-/**
- * Main BMI calculation function
- */
-export function calculateBMIResult(inputs: BMIInputs): BMIResult {
-  let weightKg: number;
-  let heightCm: number;
-
-  if (inputs.unit === 'imperial') {
-    if (!inputs.heightFeet && inputs.heightFeet !== 0) {
-      throw new Error('Height in feet is required for imperial units');
-    }
-    if (!inputs.heightInches && inputs.heightInches !== 0) {
-      throw new Error('Height in inches is required for imperial units');
-    }
-    
-    const converted = convertImperialToMetric(inputs.weight, inputs.heightFeet, inputs.heightInches);
-    weightKg = converted.weightKg;
-    heightCm = converted.heightCm;
-  } else {
-    weightKg = inputs.weight;
-    heightCm = inputs.height;
-  }
-
-  const bmi = calculateBMI(weightKg, heightCm);
-  const category = getBMICategory(bmi);
-  const categoryColor = getCategoryColor(category);
-  const healthRisk = getHealthRisk(category);
-  const recommendations = getHealthRecommendations(category);
-
+  const bmi = Math.round((weightKg / (heightM * heightM)) * 10) / 10;
+  const m2 = heightM * heightM;
   return {
-    bmi: Math.round(bmi * 10) / 10, // Round to 1 decimal place
-    category,
-    categoryColor,
-    healthRisk,
-    recommendations
+    bmi,
+    category: categoryForBMI(bmi),
+    weightKg,
+    heightCm,
+    healthyRangeKg: {
+      min: Math.round(18.5 * m2 * 10) / 10,
+      max: Math.round(24.9 * m2 * 10) / 10,
+    },
   };
-}
-
-/**
- * Validate BMI inputs
- */
-export function validateBMIInputs(inputs: Partial<BMIInputs>): string[] {
-  const errors: string[] = [];
-
-  if (!inputs.weight || inputs.weight <= 0) {
-    errors.push('Weight must be a positive number');
-  }
-
-  if (inputs.unit === 'metric') {
-    if (!inputs.height || inputs.height <= 0) {
-      errors.push('Height must be a positive number');
-    }
-    if (inputs.weight && inputs.weight > 1000) {
-      errors.push('Weight seems unrealistic (max 1000 kg)');
-    }
-    if (inputs.height && inputs.height > 300) {
-      errors.push('Height seems unrealistic (max 300 cm)');
-    }
-  } else if (inputs.unit === 'imperial') {
-    if (inputs.heightFeet === undefined || inputs.heightFeet < 0) {
-      errors.push('Height in feet must be a non-negative number');
-    }
-    if (inputs.heightInches === undefined || inputs.heightInches < 0 || inputs.heightInches >= 12) {
-      errors.push('Height in inches must be between 0 and 11');
-    }
-    if (inputs.weight && inputs.weight > 2200) {
-      errors.push('Weight seems unrealistic (max 2200 lbs)');
-    }
-    if (inputs.heightFeet && inputs.heightFeet > 10) {
-      errors.push('Height seems unrealistic (max 10 feet)');
-    }
-  }
-
-  return errors;
 }

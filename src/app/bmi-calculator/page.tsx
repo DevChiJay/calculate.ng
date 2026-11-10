@@ -1,80 +1,87 @@
-import { Metadata } from 'next';
-import dynamic from 'next/dynamic';
-import { ThemedCalculatorPage } from '@/components/layout/themed-calculator-page';
-import { ToastProvider } from '@/components/ui/toast';
+import { BmiCalculator } from "@/components/calculators/bmi-calculator";
+import { ContentSection, DataTable, FaqList, td, th, type FaqItem } from "@/components/content";
+import { JsonLd } from "@/components/json-ld";
+import { PageHeader } from "@/components/page-header";
+import { BMI_CATEGORIES } from "@/lib/calculations/bmi";
+import { breadcrumbSchema, faqSchema, webApplicationSchema } from "@/lib/schema";
+import { pageMetadata } from "@/lib/seo";
+import { toneText } from "@/lib/tone";
 
-// Lazy load the calculator component
-const EnhancedBMICalculator = dynamic(
-  () => import('@/components/calculators/EnhancedBMICalculator'),
-  { 
-    loading: () => (
-      <div className="space-y-8 max-w-3xl mx-auto p-6">
-        {/* Header Skeleton */}
-        <div className="text-center space-y-4">
-          <div className="mx-auto w-16 h-16 rounded-full bg-primary/10 animate-pulse"></div>
-          <div className="space-y-2">
-            <div className="h-8 w-48 bg-muted/50 rounded-md animate-pulse mx-auto"></div>
-            <div className="h-4 w-96 max-w-full bg-muted/40 rounded-md animate-pulse mx-auto"></div>
-          </div>
-        </div>
-        
-        {/* Form Skeleton */}
-        <div className="border rounded-lg p-6 bg-card shadow-sm animate-pulse">
-          <div className="space-y-6">
-            <div className="flex items-center space-x-2 mb-4">
-              <div className="h-5 w-5 rounded-full bg-muted/60"></div>
-              <div className="h-5 w-40 bg-muted/60 rounded-md"></div>
-            </div>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="space-y-2">
-                <div className="h-5 w-24 bg-muted/50 rounded-md"></div>
-                <div className="h-10 w-full bg-muted/40 rounded-md"></div>
-              </div>
-              <div className="space-y-2">
-                <div className="h-5 w-24 bg-muted/50 rounded-md"></div>
-                <div className="h-10 w-full bg-muted/40 rounded-md"></div>
-              </div>
-            </div>
-            
-            <div className="h-60 w-full bg-muted/30 rounded-md"></div>
-          </div>
-        </div>
-      </div>
-    )
-  }
-);
+export const metadata = pageMetadata("/bmi-calculator");
 
-export const metadata: Metadata = {
-  title: 'BMI Calculator - Body Mass Index Calculator | Calculate.ng',
-  description:
-    'Calculate your Body Mass Index (BMI) with our free online calculator. Supports metric and imperial units with instant results and personalized health recommendations.',
-  keywords: [
-    'BMI calculator',
-    'body mass index',
-    'health calculator',
-    'weight calculator',
-    'fitness calculator',
-    'Nigeria',
-  ],
-  openGraph: {
-    title: 'Free BMI Calculator - Calculate Your Body Mass Index',
-    description:
-      'Calculate your BMI instantly with our easy-to-use calculator. Get personalized health recommendations based on your results.',
-    type: 'website',
+const faq: FaqItem[] = [
+  {
+    question: "How is BMI calculated?",
+    answer:
+      "BMI is your weight in kilograms divided by your height in metres squared. For example, 70 kg at 1.75 m is 70 ÷ 3.0625 = 22.9. With pounds and inches the calculator converts to kg and cm first.",
   },
-};
+  {
+    question: "What is a healthy BMI?",
+    answer:
+      "For adults, the World Health Organization treats a BMI from 18.5 to 24.9 as the healthy weight range. Below 18.5 is underweight, 25 to 29.9 is overweight, and 30 or more is obese.",
+  },
+  {
+    question: "Is BMI accurate for everyone?",
+    answer:
+      "No. BMI does not separate muscle from fat, so very muscular people can score as overweight. It is also not designed for children, pregnant women or elite athletes. Use it as a starting point and talk to a healthcare provider about your own situation.",
+  },
+  {
+    question: "Does this calculator store my details?",
+    answer:
+      "No. The calculation runs in your browser and your weight and height are not sent or saved anywhere.",
+  },
+];
 
-export default function BMICalculatorPage() {
+export default function BmiCalculatorPage() {
   return (
-    <ToastProvider>
-      <ThemedCalculatorPage
-        theme="bmi"
-        title="BMI Calculator"
-        description="Calculate your Body Mass Index and get personalized health insights with support for both metric and imperial units."
-      >
-        <EnhancedBMICalculator />
-      </ThemedCalculatorPage>
-    </ToastProvider>
+    <div className="container-x py-10 sm:py-14">
+      <JsonLd data={webApplicationSchema("/bmi-calculator", "BMI Calculator", "HealthApplication")} />
+      <JsonLd data={breadcrumbSchema("/bmi-calculator", "BMI calculator")} />
+      <JsonLd data={faqSchema(faq)} />
+
+      <PageHeader eyebrow="Health" title="BMI Calculator">
+        Enter your weight and height in kilograms and centimetres, or pounds and feet, to see your body mass index and
+        what range it falls in.
+      </PageHeader>
+
+      <BmiCalculator />
+
+      <ContentSection id="how" title="How BMI is calculated">
+        <p>
+          <strong>BMI = weight (kg) ÷ height (m)²</strong>. The result is rounded to one decimal place, and the category
+          is read from that rounded figure using the World Health Organization’s adult cut-offs.
+        </p>
+        <DataTable caption="BMI categories for adults">
+          <thead>
+            <tr className="border-b border-border">
+              <th scope="col" className={th}>Category</th>
+              <th scope="col" className={th}>BMI</th>
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-border">
+            {BMI_CATEGORIES.map((c) => (
+              <tr key={c.id}>
+                <th scope="row" className={`px-4 py-3 text-left font-medium ${toneText[c.tone]}`}>{c.label}</th>
+                <td className={td}>
+                  {c.max === null ? `${c.min} or more` : c.min === 0 ? `Under ${c.max}` : `${c.min} to ${(c.max - 0.1).toFixed(1)}`}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </DataTable>
+      </ContentSection>
+
+      <ContentSection id="limits" title="What BMI can and cannot tell you">
+        <p>
+          BMI is a quick screening number, not a diagnosis. It ignores where weight is carried, muscle mass, age and
+          family history. It is meant for adults aged 18 and over. If your result is outside the healthy range, or you
+          are worried about your weight, speak to a doctor or dietitian.
+        </p>
+      </ContentSection>
+
+      <ContentSection id="faq" title="Frequently asked questions">
+        <FaqList items={faq} />
+      </ContentSection>
+    </div>
   );
 }

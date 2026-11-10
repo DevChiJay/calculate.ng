@@ -1,0 +1,59 @@
+import type { Metadata } from "next";
+import { site } from "@/lib/site";
+
+/** Per-route SEO copy. Titles ≤ 60 chars, descriptions ≤ 160 chars. `updated` feeds the sitemap. */
+export const pages = {
+  "/": {
+    title: "Nigerian Tax, Inflation & BMI Calculators | Calculate.ng",
+    description:
+      "Free Nigerian calculators: 2026 PAYE tax and take-home pay, inflation and the value of the naira, and BMI. Clear workings, no sign-up.",
+    updated: "2026-11-10",
+  },
+  "/tax-calculator": {
+    title: "Nigeria PAYE Tax Calculator 2026 (NTA 2025) | Calculate.ng",
+    description:
+      "Estimate your 2026 PAYE and take-home pay under the Nigeria Tax Act 2025. Monthly and yearly views, rent relief, and a comparison with the old rules.",
+    updated: "2026-11-10",
+  },
+  "/inflation-calculator": {
+    title: "Nigeria Inflation Calculator (CPI) | Calculate.ng",
+    description:
+      "See how inflation has changed the value of your naira between two years, using Nigerian Consumer Price Index (CPI) data.",
+    updated: "2026-11-10",
+  },
+  "/bmi-calculator": {
+    title: "BMI Calculator (Metric & Imperial) | Calculate.ng",
+    description:
+      "Calculate your body mass index in kg and cm or lb and ft/in, see your WHO category and what it means. For adults aged 18 and over.",
+    updated: "2026-11-10",
+  },
+} as const;
+
+export type PagePath = keyof typeof pages;
+
+const ogImage = {
+  url: "/opengraph-image",
+  width: 1200,
+  height: 630,
+  alt: "Calculate.ng: Nigerian tax, inflation and BMI calculators",
+};
+
+/** Page metadata with its own canonical, Open Graph and Twitter cards (nothing inherited from "/"). */
+export function pageMetadata(path: PagePath): Metadata {
+  const { title, description } = pages[path];
+  return {
+    title: { absolute: title },
+    description,
+    alternates: { canonical: path },
+    openGraph: {
+      title,
+      description,
+      url: path,
+      siteName: site.name,
+      locale: "en_NG",
+      type: "website",
+      images: [ogImage],
+    },
+    twitter: { card: "summary_large_image", title, description, images: [ogImage.url] },
+  };
+}

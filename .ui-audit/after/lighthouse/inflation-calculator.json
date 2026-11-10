@@ -1,0 +1,26 @@
+{
+ "url": "http://localhost:3100/inflation-calculator",
+ "scores": {
+  "performance": 100,
+  "accessibility": 100,
+  "best-practices": 100,
+  "seo": 100
+ },
+ "metrics": {
+  "first-contentful-paint": "0.8 s",
+  "largest-contentful-paint": "0.8 s",
+  "total-blocking-time": "50 ms",
+  "cumulative-layout-shift": "0",
+  "speed-index": "0.8 s"
+ },
+ "failed": [
+  {
+   "id": "interactive",
+   "title": "Time to Interactive"
+  },
+  {
+   "id": "network-dependency-tree-insight",
+   "title": "Network dependency tree"
+  }
+ ]
+}
