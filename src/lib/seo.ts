@@ -27,6 +27,12 @@ export const pages = {
       "Find the gross salary you need for a target take-home pay under Nigeria's 2026 PAYE rules. Monthly and yearly, with rent relief and the workings shown.",
     updated: "2026-11-10",
   },
+  "/vat-calculator": {
+    title: "VAT Calculator Nigeria (7.5%) | Calculate.ng",
+    description:
+      "Add VAT to a price or take it out of a VAT-inclusive total at Nigeria's 7.5% rate. See the VAT amount, net and gross prices, and how the maths works.",
+    updated: "2026-11-10",
+  },
   "/loan-calculator": {
     title: "Nigeria Loan Calculator: Flat vs Reducing | Calculate.ng",
     description:

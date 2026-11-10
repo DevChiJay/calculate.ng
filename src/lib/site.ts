@@ -41,7 +41,7 @@ export const calculatorGroups: readonly CalculatorGroup[] = [
         name: "Income tax (PAYE)",
         short: "Tax",
         blurb: "Estimate PAYE and take-home pay under the Nigeria Tax Act 2025, monthly and yearly.",
-        related: ["/net-to-gross-calculator"],
+        related: ["/net-to-gross-calculator", "/vat-calculator"],
       },
       {
         path: "/net-to-gross-calculator",
@@ -49,6 +49,13 @@ export const calculatorGroups: readonly CalculatorGroup[] = [
         short: "Net to gross",
         blurb: "Find the gross pay you need to take home a target amount, under the 2026 PAYE rules.",
         related: ["/tax-calculator"],
+      },
+      {
+        path: "/vat-calculator",
+        name: "VAT",
+        short: "VAT",
+        blurb: "Add VAT to a price or take it out of a total, at the 7.5% standard rate.",
+        related: ["/tax-calculator", "/net-to-gross-calculator"],
       },
     ],
   },
