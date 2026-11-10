@@ -33,6 +33,12 @@ export const pages = {
       "Work out monthly repayments, total interest and the true annual cost of a loan, with flat or reducing-balance interest and fees. See the full schedule.",
     updated: "2026-11-10",
   },
+  "/savings-calculator": {
+    title: "Savings & Compound Interest Calculator | Calculate.ng",
+    description:
+      "See how much your savings can grow with compound interest and monthly top-ups. Choose how often interest is added and see the year-by-year balance.",
+    updated: "2026-11-10",
+  },
   "/inflation-calculator": {
     title: "Nigeria Inflation Calculator (CPI) | Calculate.ng",
     description:
