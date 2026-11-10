@@ -21,6 +21,12 @@ export const pages = {
       "Estimate your 2026 PAYE and take-home pay under the Nigeria Tax Act 2025. Monthly and yearly views, rent relief, and a comparison with the old rules.",
     updated: "2026-11-10",
   },
+  "/net-to-gross-calculator": {
+    title: "Net to Gross Salary Calculator Nigeria 2026 | Calculate.ng",
+    description:
+      "Find the gross salary you need for a target take-home pay under Nigeria's 2026 PAYE rules. Monthly and yearly, with rent relief and the workings shown.",
+    updated: "2026-11-10",
+  },
   "/inflation-calculator": {
     title: "Nigeria Inflation Calculator (CPI) | Calculate.ng",
     description:

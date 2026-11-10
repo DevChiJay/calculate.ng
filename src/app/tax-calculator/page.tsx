@@ -1,12 +1,13 @@
 import { TaxCalculator } from "@/components/calculators/tax-calculator";
 import { CalculatorPage } from "@/components/calculator-page";
 import { ContentSection, DataTable, td, th, type FaqItem } from "@/components/content";
+import { RulesStatus } from "@/components/rules-status";
 import { Notice, Tag } from "@/components/ui/notice";
 import { pageMetadata } from "@/lib/seo";
 import { computeTax } from "@/lib/tax/engine";
 import { RULES } from "@/lib/tax/rules";
 import type { TaxInputs } from "@/lib/tax/types";
-import { formatIsoDate, formatNaira } from "@/lib/utils/format";
+import { formatNaira } from "@/lib/utils/format";
 
 export const metadata = pageMetadata("/tax-calculator");
 
@@ -81,19 +82,7 @@ export default function TaxCalculatorPage() {
       eyebrow="Income tax · PAYE"
       title="Nigeria PAYE Tax Calculator 2026"
       intro="Work out your PAYE tax and take-home pay under the Nigeria Tax Act 2025, by the month or by the year, and see how it compares with the old rules."
-      status={
-        <>
-          Rules effective {formatIsoDate(rules.effectiveFrom)} · last checked {formatIsoDate(rules.lastChecked)} · Sources:{" "}
-        {rules.sources.map((s, i) => (
-          <span key={s.url}>
-            {i > 0 && ", "}
-            <a href={s.url} className="underline underline-offset-4 hover:text-foreground" target="_blank" rel="noopener noreferrer">
-              {s.label}
-            </a>
-          </span>
-        ))}
-        </>
-      }
+      status={<RulesStatus rules={rules} />}
       calculator={<TaxCalculator />}
       faq={faq}
     >
