@@ -1,138 +1,81 @@
 import Link from "next/link";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Calculator, TrendingUp, Heart, DollarSign, Palette } from "lucide-react";
-import { ThemeShowcase } from "@/components/layout/theme-showcase";
+import { ArrowRight } from "lucide-react";
+import { CalculatorCard } from "@/components/calculator-card";
+import { Eyebrow } from "@/components/ui/eyebrow";
+import { buttonVariants } from "@/components/ui/button";
+import { pageMetadata } from "@/lib/seo";
+import { calculatorGroups } from "@/lib/site";
+import { cn } from "@/lib/utils";
 
-const calculators = [
+export const metadata = pageMetadata("/");
+
+const reasons = [
   {
-    title: "BMI Calculator",
-    description: "Calculate your Body Mass Index with support for metric and imperial units",
-    icon: Heart,
-    href: "/bmi-calculator",
-    theme: "Ocean",
-    color: "from-blue-500 to-cyan-500",
+    title: "Current rules, with dates",
+    body: "The tax calculator follows the Nigeria Tax Act 2025 and shows the date its rules took effect and when we last checked them.",
   },
   {
-    title: "Inflation Calculator",
-    description: "Track inflation impact using Consumer Price Index data",
-    icon: TrendingUp,
-    href: "/inflation-calculator",
-    theme: "Sunset",
-    color: "from-orange-500 to-red-500",
+    title: "Workings shown",
+    body: "Every result comes with the steps behind it, so you can see where the number came from and check it.",
   },
   {
-    title: "Tax Calculator",
-    description: "Calculate Nigerian income tax with current brackets and allowances",
-    icon: DollarSign,
-    href: "/tax-calculator",
-    theme: "Royal",
-    color: "from-purple-500 to-pink-500",
+    title: "Private by design",
+    body: "Calculations run in your browser. What you type is not sent to us or saved. There is nothing to sign up for.",
   },
 ];
 
-export default function Home() {
+export default function HomePage() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20">
-      <div className="container mx-auto px-4 py-12">
-        {/* Hero Section */}
-        <div className="text-center mb-16">
-          <div className="flex items-center justify-center gap-3 mb-6">
-            <Calculator className="h-12 w-12 text-primary" />
-            <h1 className="text-4xl md:text-6xl font-bold bg-gradient-to-r from-primary via-purple-500 to-pink-500 bg-clip-text text-transparent">
-              Calculate.ng
-            </h1>
-          </div>
-          <p className="text-xl text-muted-foreground max-w-3xl mx-auto mb-8">
-            Your comprehensive Nigerian calculator suite featuring BMI, Tax, and Inflation calculators
-            with beautiful themes and modern design.
-          </p>
-          <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground">
-            <Palette className="h-4 w-4" />
-            <span>Try different themes using the palette icon in the header</span>
-          </div>
+    <div className="container-x py-12 sm:py-16">
+      <section aria-labelledby="hero" className="max-w-3xl">
+        <Eyebrow className="mb-4">Free · No sign-up</Eyebrow>
+        <h1 id="hero" className="text-4xl font-semibold leading-[1.08] sm:text-5xl md:text-6xl">
+          Free Nigerian calculators for tax, loans, savings and more
+        </h1>
+        <p className="mt-5 text-lg leading-relaxed text-muted-foreground sm:text-xl">
+          Work out your take-home pay under the 2026 tax rules, the real cost of a loan, how your savings grow, your CGPA
+          and more. Clear answers in seconds, with the workings shown.
+        </p>
+        <div className="mt-8 flex flex-wrap gap-3">
+          <Link href="/tax-calculator" className={cn(buttonVariants({ size: "lg" }))}>
+            Calculate my PAYE tax <ArrowRight aria-hidden />
+          </Link>
+          <Link href="/calculators" className={cn(buttonVariants({ size: "lg", variant: "outline" }))}>
+            All calculators
+          </Link>
         </div>
+      </section>
 
-        {/* Calculator Cards */}
-        <div className="grid md:grid-cols-3 gap-6 mb-16">
-          {calculators.map((calc) => (
-            <Card key={calc.href} className="calculator-card group">
-              <CardHeader>
-                <div className={`w-12 h-12 rounded-lg bg-gradient-to-r ${calc.color} flex items-center justify-center mb-4`}>
-                  <calc.icon className="h-6 w-6 text-white" />
-                </div>
-                <CardTitle className="flex items-center justify-between">
-                  {calc.title}
-                  <span className="text-xs px-2 py-1 bg-muted rounded-full">
-                    {calc.theme}
-                  </span>
-                </CardTitle>
-                <CardDescription>{calc.description}</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <Link href={calc.href}>
-                  <Button className="w-full group-hover:scale-105 transition-transform">
-                    Start Calculating
-                  </Button>
-                </Link>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-
-        {/* Theme Showcase Section */}
-        <div className="text-center mb-8">
-          <h2 className="text-3xl font-bold mb-4">Dynamic Theme System</h2>
-          <p className="text-muted-foreground max-w-2xl mx-auto">
-            Each calculator features its own custom color scheme that automatically applies when you visit the page.
-            You can also manually switch themes using the palette selector.
-          </p>
-        </div>
-
-        <div className="max-w-md mx-auto">
-          <ThemeShowcase />
-        </div>
-
-        {/* Features Grid */}
-        <div className="mt-16 grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-          <div className="text-center">
-            <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mx-auto mb-4">
-              <Heart className="h-6 w-6 text-primary" />
-            </div>
-            <h3 className="font-semibold mb-2">Health Focused</h3>
-            <p className="text-sm text-muted-foreground">
-              BMI calculator with personalized health recommendations
-            </p>
-          </div>
-          <div className="text-center">
-            <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mx-auto mb-4">
-              <DollarSign className="h-6 w-6 text-primary" />
-            </div>
-            <h3 className="font-semibold mb-2">Tax Compliant</h3>
-            <p className="text-sm text-muted-foreground">
-              Up-to-date Nigerian tax brackets and allowances
-            </p>
-          </div>
-          <div className="text-center">
-            <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mx-auto mb-4">
-              <TrendingUp className="h-6 w-6 text-primary" />
-            </div>
-            <h3 className="font-semibold mb-2">Economic Data</h3>
-            <p className="text-sm text-muted-foreground">
-              Real CPI data for accurate inflation calculations
-            </p>
-          </div>
-          <div className="text-center">
-            <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mx-auto mb-4">
-              <Palette className="h-6 w-6 text-primary" />
-            </div>
-            <h3 className="font-semibold mb-2">Beautiful Themes</h3>
-            <p className="text-sm text-muted-foreground">
-              Dynamic color schemes that adapt to each calculator
-            </p>
-          </div>
-        </div>
+      <div className="mt-16 space-y-10">
+        {calculatorGroups.map((g) => (
+          <section key={g.id} aria-labelledby={`home-${g.id}`}>
+            <h2 id={`home-${g.id}`} className="text-xl font-semibold sm:text-2xl">
+              {g.name}
+            </h2>
+            <ul className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {g.items.map((c) => (
+                <li key={c.path}>
+                  <CalculatorCard item={c} badge={c.path === "/tax-calculator" ? "Updated for 2026" : undefined} />
+                </li>
+              ))}
+            </ul>
+          </section>
+        ))}
       </div>
+
+      <section aria-labelledby="why" className="mt-16">
+        <h2 id="why" className="text-2xl font-semibold sm:text-3xl">
+          Why use Calculate.ng
+        </h2>
+        <ul className="mt-6 grid gap-6 md:grid-cols-3">
+          {reasons.map((r) => (
+            <li key={r.title}>
+              <h3 className="text-lg font-semibold">{r.title}</h3>
+              <p className="mt-2 text-muted-foreground">{r.body}</p>
+            </li>
+          ))}
+        </ul>
+      </section>
     </div>
   );
 }

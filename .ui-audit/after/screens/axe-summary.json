@@ -1,0 +1,194 @@
+[
+  {
+    "route": "/",
+    "viewport": "375",
+    "scheme": "light",
+    "horizontalOverflowPx": 0,
+    "violations": [],
+    "violationNodes": 0
+  },
+  {
+    "route": "/bmi-calculator",
+    "viewport": "375",
+    "scheme": "light",
+    "horizontalOverflowPx": 0,
+    "violations": [],
+    "violationNodes": 0
+  },
+  {
+    "route": "/tax-calculator",
+    "viewport": "375",
+    "scheme": "light",
+    "horizontalOverflowPx": 0,
+    "violations": [],
+    "violationNodes": 0
+  },
+  {
+    "route": "/inflation-calculator",
+    "viewport": "375",
+    "scheme": "light",
+    "horizontalOverflowPx": 0,
+    "violations": [],
+    "violationNodes": 0
+  },
+  {
+    "route": "/",
+    "viewport": "768",
+    "scheme": "light",
+    "horizontalOverflowPx": 0,
+    "violations": [],
+    "violationNodes": 0
+  },
+  {
+    "route": "/bmi-calculator",
+    "viewport": "768",
+    "scheme": "light",
+    "horizontalOverflowPx": 0,
+    "violations": [],
+    "violationNodes": 0
+  },
+  {
+    "route": "/tax-calculator",
+    "viewport": "768",
+    "scheme": "light",
+    "horizontalOverflowPx": 0,
+    "violations": [],
+    "violationNodes": 0
+  },
+  {
+    "route": "/inflation-calculator",
+    "viewport": "768",
+    "scheme": "light",
+    "horizontalOverflowPx": 0,
+    "violations": [],
+    "violationNodes": 0
+  },
+  {
+    "route": "/",
+    "viewport": "1440",
+    "scheme": "light",
+    "horizontalOverflowPx": 0,
+    "violations": [],
+    "violationNodes": 0
+  },
+  {
+    "route": "/bmi-calculator",
+    "viewport": "1440",
+    "scheme": "light",
+    "horizontalOverflowPx": 0,
+    "violations": [],
+    "violationNodes": 0
+  },
+  {
+    "route": "/tax-calculator",
+    "viewport": "1440",
+    "scheme": "light",
+    "horizontalOverflowPx": 0,
+    "violations": [],
+    "violationNodes": 0
+  },
+  {
+    "route": "/inflation-calculator",
+    "viewport": "1440",
+    "scheme": "light",
+    "horizontalOverflowPx": 0,
+    "violations": [],
+    "violationNodes": 0
+  },
+  {
+    "route": "/",
+    "viewport": "375",
+    "scheme": "dark",
+    "horizontalOverflowPx": 0,
+    "violations": [],
+    "violationNodes": 0
+  },
+  {
+    "route": "/bmi-calculator",
+    "viewport": "375",
+    "scheme": "dark",
+    "horizontalOverflowPx": 0,
+    "violations": [],
+    "violationNodes": 0
+  },
+  {
+    "route": "/tax-calculator",
+    "viewport": "375",
+    "scheme": "dark",
+    "horizontalOverflowPx": 0,
+    "violations": [],
+    "violationNodes": 0
+  },
+  {
+    "route": "/inflation-calculator",
+    "viewport": "375",
+    "scheme": "dark",
+    "horizontalOverflowPx": 0,
+    "violations": [],
+    "violationNodes": 0
+  },
+  {
+    "route": "/",
+    "viewport": "768",
+    "scheme": "dark",
+    "horizontalOverflowPx": 0,
+    "violations": [],
+    "violationNodes": 0
+  },
+  {
+    "route": "/bmi-calculator",
+    "viewport": "768",
+    "scheme": "dark",
+    "horizontalOverflowPx": 0,
+    "violations": [],
+    "violationNodes": 0
+  },
+  {
+    "route": "/tax-calculator",
+    "viewport": "768",
+    "scheme": "dark",
+    "horizontalOverflowPx": 0,
+    "violations": [],
+    "violationNodes": 0
+  },
+  {
+    "route": "/inflation-calculator",
+    "viewport": "768",
+    "scheme": "dark",
+    "horizontalOverflowPx": 0,
+    "violations": [],
+    "violationNodes": 0
+  },
+  {
+    "route": "/",
+    "viewport": "1440",
+    "scheme": "dark",
+    "horizontalOverflowPx": 0,
+    "violations": [],
+    "violationNodes": 0
+  },
+  {
+    "route": "/bmi-calculator",
+    "viewport": "1440",
+    "scheme": "dark",
+    "horizontalOverflowPx": 0,
+    "violations": [],
+    "violationNodes": 0
+  },
+  {
+    "route": "/tax-calculator",
+    "viewport": "1440",
+    "scheme": "dark",
+    "horizontalOverflowPx": 0,
+    "violations": [],
+    "violationNodes": 0
+  },
+  {
+    "route": "/inflation-calculator",
+    "viewport": "1440",
+    "scheme": "dark",
+    "horizontalOverflowPx": 0,
+    "violations": [],
+    "violationNodes": 0
+  }
+]

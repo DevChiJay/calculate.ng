@@ -136,106 +136,37 @@ export const NIGERIA_CPI_DATA: CPIDataPoint[] = [
   { year: 2025, month: 5, cpi: 614.2, date: '2025-05', inflationRate: 15.0 },
 ];
 
+const SORTED = [...NIGERIA_CPI_DATA].sort((a, b) => a.year - b.year || a.month - b.month);
+const monthIndex = (year: number, month: number) => year * 12 + (month - 1);
+
 /**
- * Get CPI value for a specific date
+ * CPI for a "YYYY-MM" month. Exact months are returned as published; months between two published
+ * points are linearly interpolated. Outside the published range this returns NaN (never a guess).
  */
-export function getCPIForDate(dateString: string): number {
-  const targetDate = new Date(dateString);
-  const year = targetDate.getFullYear();
-  const month = targetDate.getMonth() + 1;
+export function getCPIForMonth(ym: string): number {
+  const m = /^(\d{4})-(\d{2})$/.exec(ym);
+  if (!m) return Number.NaN;
+  const target = monthIndex(Number(m[1]), Number(m[2]));
 
-  // Find exact match first
-  const exactMatch = NIGERIA_CPI_DATA.find(d => d.year === year && d.month === month);
-  if (exactMatch) {
-    return exactMatch.cpi;
+  let before: CPIDataPoint | undefined;
+  let after: CPIDataPoint | undefined;
+  for (const d of SORTED) {
+    const idx = monthIndex(d.year, d.month);
+    if (idx === target) return d.cpi;
+    if (idx < target) before = d;
+    else {
+      after = d;
+      break;
+    }
   }
-
-  // Find closest available data
-  const availableData = NIGERIA_CPI_DATA.filter(d => d.year === year);
-  if (availableData.length === 0) {
-    // If no data for the year, find closest year
-    const closestYear = NIGERIA_CPI_DATA.reduce((prev, curr) => 
-      Math.abs(curr.year - year) < Math.abs(prev.year - year) ? curr : prev
-    );
-    return closestYear.cpi;
-  }
-
-  // Find closest month in the same year
-  const closest = availableData.reduce((prev, curr) => 
-    Math.abs(curr.month - month) < Math.abs(prev.month - month) ? curr : prev
-  );
-  
-  return closest.cpi;
+  if (!before || !after) return Number.NaN;
+  const a = monthIndex(before.year, before.month);
+  const b = monthIndex(after.year, after.month);
+  return before.cpi + ((after.cpi - before.cpi) * (target - a)) / (b - a);
 }
 
-/**
- * Get available date range for CPI data
- */
+/** First and last published months as "YYYY-MM". */
 export function getAvailableDateRange(): { min: string; max: string } {
-  const sortedData = [...NIGERIA_CPI_DATA].sort((a, b) => {
-    if (a.year !== b.year) return a.year - b.year;
-    return a.month - b.month;
-  });
-
-  const minData = sortedData[0];
-  const maxData = sortedData[sortedData.length - 1];
-
-  return {
-    min: `${minData.year}-${minData.month.toString().padStart(2, '0')}`,
-    max: `${maxData.year}-${maxData.month.toString().padStart(2, '0')}`
-  };
+  const fmt = (d: CPIDataPoint) => `${d.year}-${String(d.month).padStart(2, "0")}`;
+  return { min: fmt(SORTED[0]), max: fmt(SORTED[SORTED.length - 1]) };
 }
-
-/**
- * Get CPI data for chart visualization
- */
-export function getCPIDataForChart(startYear: number, endYear: number): CPIDataPoint[] {
-  return NIGERIA_CPI_DATA.filter(d => d.year >= startYear && d.year <= endYear)
-    .sort((a, b) => {
-      if (a.year !== b.year) return a.year - b.year;
-      return a.month - b.month;
-    });
-}
-
-/**
- * Get the most recent CPI data point
- */
-export function getLatestCPI(): CPIDataPoint {
-  // Retained static implementation for synchronous consumers; dynamic async version in cpi-source
-  return NIGERIA_CPI_DATA.reduce((latest, current) => {
-    const latestDate = new Date(latest.year, latest.month - 1);
-    const currentDate = new Date(current.year, current.month - 1);
-    return currentDate > latestDate ? current : latest;
-  });
-}
-
-// NOTE: Async data access layer available at '@/lib/data/cpi-source'
-
-/**
- * Get year-over-year inflation rate for a specific period
- */
-export function getInflationRate(fromDate: string, toDate: string): number {
-  const fromCPI = getCPIForDate(fromDate);
-  const toCPI = getCPIForDate(toDate);
-  
-  return ((toCPI - fromCPI) / fromCPI) * 100;
-}
-
-/**
- * Data Source Information
- * 
- * Primary Sources:
- * - Nigerian Bureau of Statistics (NBS) - Consumer Price Index Reports
- * - NBS Monthly CPI Bulletins (https://nigerianstat.gov.ng/)
- * 
- * Data Quality Notes:
- * - Base period aligned with NBS methodology (May 2009 = 100)
- * - Inflation rates calculated as year-over-year percentage change
- * - Data represents All Items CPI (composite of urban and rural areas)
- * - Latest data as of June 2025 (up to May 2025 figures)
- * 
- * For Production Use:
- * - Integrate with NBS official API when available
- * - Consider implementing automatic data updates
- * - Validate against multiple official sources
- */

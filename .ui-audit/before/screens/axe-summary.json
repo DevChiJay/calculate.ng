@@ -1,0 +1,460 @@
+[
+  {
+    "route": "/",
+    "viewport": "375",
+    "scheme": "light",
+    "horizontalOverflowPx": 37,
+    "violations": [],
+    "violationNodes": 0
+  },
+  {
+    "route": "/bmi-calculator",
+    "viewport": "375",
+    "scheme": "light",
+    "horizontalOverflowPx": 0,
+    "violations": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 6
+      }
+    ],
+    "violationNodes": 6
+  },
+  {
+    "route": "/tax-calculator",
+    "viewport": "375",
+    "scheme": "light",
+    "horizontalOverflowPx": 0,
+    "violations": [
+      {
+        "id": "aria-valid-attr-value",
+        "impact": "critical",
+        "nodes": 1
+      },
+      {
+        "id": "button-name",
+        "impact": "critical",
+        "nodes": 1
+      },
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 6
+      }
+    ],
+    "violationNodes": 8
+  },
+  {
+    "route": "/inflation-calculator",
+    "viewport": "375",
+    "scheme": "light",
+    "horizontalOverflowPx": 0,
+    "violations": [
+      {
+        "id": "button-name",
+        "impact": "critical",
+        "nodes": 2
+      },
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 6
+      }
+    ],
+    "violationNodes": 8
+  },
+  {
+    "route": "/",
+    "viewport": "768",
+    "scheme": "light",
+    "horizontalOverflowPx": 0,
+    "violations": [
+      {
+        "id": "label-content-name-mismatch",
+        "impact": "serious",
+        "nodes": 1
+      }
+    ],
+    "violationNodes": 1
+  },
+  {
+    "route": "/bmi-calculator",
+    "viewport": "768",
+    "scheme": "light",
+    "horizontalOverflowPx": 0,
+    "violations": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 8
+      },
+      {
+        "id": "label-content-name-mismatch",
+        "impact": "serious",
+        "nodes": 1
+      }
+    ],
+    "violationNodes": 9
+  },
+  {
+    "route": "/tax-calculator",
+    "viewport": "768",
+    "scheme": "light",
+    "horizontalOverflowPx": 0,
+    "violations": [
+      {
+        "id": "aria-valid-attr-value",
+        "impact": "critical",
+        "nodes": 1
+      },
+      {
+        "id": "button-name",
+        "impact": "critical",
+        "nodes": 1
+      },
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 8
+      },
+      {
+        "id": "label-content-name-mismatch",
+        "impact": "serious",
+        "nodes": 1
+      }
+    ],
+    "violationNodes": 11
+  },
+  {
+    "route": "/inflation-calculator",
+    "viewport": "768",
+    "scheme": "light",
+    "horizontalOverflowPx": 0,
+    "violations": [
+      {
+        "id": "button-name",
+        "impact": "critical",
+        "nodes": 2
+      },
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 8
+      },
+      {
+        "id": "label-content-name-mismatch",
+        "impact": "serious",
+        "nodes": 1
+      }
+    ],
+    "violationNodes": 11
+  },
+  {
+    "route": "/",
+    "viewport": "1440",
+    "scheme": "light",
+    "horizontalOverflowPx": 0,
+    "violations": [
+      {
+        "id": "label-content-name-mismatch",
+        "impact": "serious",
+        "nodes": 1
+      }
+    ],
+    "violationNodes": 1
+  },
+  {
+    "route": "/bmi-calculator",
+    "viewport": "1440",
+    "scheme": "light",
+    "horizontalOverflowPx": 0,
+    "violations": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 8
+      },
+      {
+        "id": "label-content-name-mismatch",
+        "impact": "serious",
+        "nodes": 1
+      }
+    ],
+    "violationNodes": 9
+  },
+  {
+    "route": "/tax-calculator",
+    "viewport": "1440",
+    "scheme": "light",
+    "horizontalOverflowPx": 0,
+    "violations": [
+      {
+        "id": "aria-valid-attr-value",
+        "impact": "critical",
+        "nodes": 1
+      },
+      {
+        "id": "button-name",
+        "impact": "critical",
+        "nodes": 1
+      },
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 8
+      },
+      {
+        "id": "label-content-name-mismatch",
+        "impact": "serious",
+        "nodes": 1
+      }
+    ],
+    "violationNodes": 11
+  },
+  {
+    "route": "/inflation-calculator",
+    "viewport": "1440",
+    "scheme": "light",
+    "horizontalOverflowPx": 0,
+    "violations": [
+      {
+        "id": "button-name",
+        "impact": "critical",
+        "nodes": 2
+      },
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 8
+      },
+      {
+        "id": "label-content-name-mismatch",
+        "impact": "serious",
+        "nodes": 1
+      }
+    ],
+    "violationNodes": 11
+  },
+  {
+    "route": "/",
+    "viewport": "375",
+    "scheme": "dark",
+    "horizontalOverflowPx": 37,
+    "violations": [],
+    "violationNodes": 0
+  },
+  {
+    "route": "/bmi-calculator",
+    "viewport": "375",
+    "scheme": "dark",
+    "horizontalOverflowPx": 0,
+    "violations": [],
+    "violationNodes": 0
+  },
+  {
+    "route": "/tax-calculator",
+    "viewport": "375",
+    "scheme": "dark",
+    "horizontalOverflowPx": 0,
+    "violations": [
+      {
+        "id": "aria-valid-attr-value",
+        "impact": "critical",
+        "nodes": 1
+      },
+      {
+        "id": "button-name",
+        "impact": "critical",
+        "nodes": 1
+      }
+    ],
+    "violationNodes": 2
+  },
+  {
+    "route": "/inflation-calculator",
+    "viewport": "375",
+    "scheme": "dark",
+    "horizontalOverflowPx": 0,
+    "violations": [
+      {
+        "id": "button-name",
+        "impact": "critical",
+        "nodes": 2
+      }
+    ],
+    "violationNodes": 2
+  },
+  {
+    "route": "/",
+    "viewport": "768",
+    "scheme": "dark",
+    "horizontalOverflowPx": 0,
+    "violations": [
+      {
+        "id": "label-content-name-mismatch",
+        "impact": "serious",
+        "nodes": 1
+      }
+    ],
+    "violationNodes": 1
+  },
+  {
+    "route": "/bmi-calculator",
+    "viewport": "768",
+    "scheme": "dark",
+    "horizontalOverflowPx": 0,
+    "violations": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 1
+      },
+      {
+        "id": "label-content-name-mismatch",
+        "impact": "serious",
+        "nodes": 1
+      }
+    ],
+    "violationNodes": 2
+  },
+  {
+    "route": "/tax-calculator",
+    "viewport": "768",
+    "scheme": "dark",
+    "horizontalOverflowPx": 0,
+    "violations": [
+      {
+        "id": "aria-valid-attr-value",
+        "impact": "critical",
+        "nodes": 1
+      },
+      {
+        "id": "button-name",
+        "impact": "critical",
+        "nodes": 1
+      },
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 1
+      },
+      {
+        "id": "label-content-name-mismatch",
+        "impact": "serious",
+        "nodes": 1
+      }
+    ],
+    "violationNodes": 4
+  },
+  {
+    "route": "/inflation-calculator",
+    "viewport": "768",
+    "scheme": "dark",
+    "horizontalOverflowPx": 0,
+    "violations": [
+      {
+        "id": "button-name",
+        "impact": "critical",
+        "nodes": 2
+      },
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 1
+      },
+      {
+        "id": "label-content-name-mismatch",
+        "impact": "serious",
+        "nodes": 1
+      }
+    ],
+    "violationNodes": 4
+  },
+  {
+    "route": "/",
+    "viewport": "1440",
+    "scheme": "dark",
+    "horizontalOverflowPx": 0,
+    "violations": [
+      {
+        "id": "label-content-name-mismatch",
+        "impact": "serious",
+        "nodes": 1
+      }
+    ],
+    "violationNodes": 1
+  },
+  {
+    "route": "/bmi-calculator",
+    "viewport": "1440",
+    "scheme": "dark",
+    "horizontalOverflowPx": 0,
+    "violations": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 1
+      },
+      {
+        "id": "label-content-name-mismatch",
+        "impact": "serious",
+        "nodes": 1
+      }
+    ],
+    "violationNodes": 2
+  },
+  {
+    "route": "/tax-calculator",
+    "viewport": "1440",
+    "scheme": "dark",
+    "horizontalOverflowPx": 0,
+    "violations": [
+      {
+        "id": "aria-valid-attr-value",
+        "impact": "critical",
+        "nodes": 1
+      },
+      {
+        "id": "button-name",
+        "impact": "critical",
+        "nodes": 1
+      },
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 1
+      },
+      {
+        "id": "label-content-name-mismatch",
+        "impact": "serious",
+        "nodes": 1
+      }
+    ],
+    "violationNodes": 4
+  },
+  {
+    "route": "/inflation-calculator",
+    "viewport": "1440",
+    "scheme": "dark",
+    "horizontalOverflowPx": 0,
+    "violations": [
+      {
+        "id": "button-name",
+        "impact": "critical",
+        "nodes": 2
+      },
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 1
+      },
+      {
+        "id": "label-content-name-mismatch",
+        "impact": "serious",
+        "nodes": 1
+      }
+    ],
+    "violationNodes": 4
+  }
+]

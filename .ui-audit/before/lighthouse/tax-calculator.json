@@ -1,0 +1,42 @@
+{
+ "url": "http://localhost:3100/tax-calculator",
+ "scores": {
+  "performance": 100,
+  "accessibility": 86,
+  "best-practices": 100,
+  "seo": 100
+ },
+ "metrics": {
+  "first-contentful-paint": "0.8\u00a0s",
+  "largest-contentful-paint": "0.8\u00a0s",
+  "total-blocking-time": "30\u00a0ms",
+  "cumulative-layout-shift": "0",
+  "speed-index": "0.8\u00a0s"
+ },
+ "failed": [
+  {
+   "id": "interactive",
+   "title": "Time to Interactive"
+  },
+  {
+   "id": "aria-valid-attr-value",
+   "title": "`[aria-*]` attributes do not have valid values"
+  },
+  {
+   "id": "button-name",
+   "title": "Buttons do not have an accessible name"
+  },
+  {
+   "id": "color-contrast",
+   "title": "Background and foreground colors do not have a sufficient contrast ratio."
+  },
+  {
+   "id": "heading-order",
+   "title": "Heading elements are not in a sequentially-descending order"
+  },
+  {
+   "id": "network-dependency-tree-insight",
+   "title": "Network dependency tree"
+  }
+ ]
+}
