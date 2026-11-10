@@ -72,6 +72,13 @@ export const calculatorGroups: readonly CalculatorGroup[] = [
     blurb: "Student grades and health",
     items: [
       {
+        path: "/cgpa-calculator",
+        name: "CGPA",
+        short: "CGPA",
+        blurb: "Work out your semester GPA and cumulative CGPA on the 5.0 or 4.0 scale.",
+        related: [],
+      },
+      {
         path: "/bmi-calculator",
         name: "BMI",
         short: "BMI",

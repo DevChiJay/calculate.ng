@@ -33,6 +33,12 @@ export const pages = {
       "See how inflation has changed the value of your naira between two years, using Nigerian Consumer Price Index (CPI) data.",
     updated: "2026-11-10",
   },
+  "/cgpa-calculator": {
+    title: "CGPA Calculator (5.0 & 4.0 Scale, Nigeria) | Calculate.ng",
+    description:
+      "Calculate your semester GPA and cumulative CGPA on the Nigerian 5.0 scale or the 4.0 scale, and see your degree class. Add courses and credit units.",
+    updated: "2026-11-10",
+  },
   "/bmi-calculator": {
     title: "BMI Calculator (Metric & Imperial) | Calculate.ng",
     description:
